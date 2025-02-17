@@ -1,4 +1,4 @@
-package com.michaelmckibbin.spaceimageanalysis;
+package com.michaelmckibbin.imageanalysis;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +10,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
-import javafx.stage.FileChooser;
-import java.io.File;
-import java.net.MalformedURLException;
 
 
 public class ImageAnalysisController {

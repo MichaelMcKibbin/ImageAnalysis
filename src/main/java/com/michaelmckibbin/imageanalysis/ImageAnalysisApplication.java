@@ -1,4 +1,4 @@
-package com.michaelmckibbin.spaceimageanalysis;
+package com.michaelmckibbin.imageanalysis;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ public class ImageAnalysisApplication extends Application {
         String css = ImageAnalysisApplication.class.getResource("styles.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        stage.setTitle("Space Image Analysis");
+        stage.setTitle("Image Analysis");
         stage.setScene(scene);
         stage.show();
     }

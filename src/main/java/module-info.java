@@ -1,4 +1,4 @@
-module com.michaelmckibbin.spaceimageanalysis {
+module com.michaelmckibbin.imageanalysis {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -9,6 +9,6 @@ module com.michaelmckibbin.spaceimageanalysis {
     requires javafx.swing;
     requires opencv;
 
-    opens com.michaelmckibbin.spaceimageanalysis to javafx.fxml;
-    exports com.michaelmckibbin.spaceimageanalysis;
+    opens com.michaelmckibbin.imageanalysis to javafx.fxml;
+    exports com.michaelmckibbin.imageanalysis;
 }

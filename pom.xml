@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.michaelmckibbin</groupId>
-    <artifactId>SpaceImageAnalysis</artifactId>
+    <artifactId>ImageAnalysis</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>SpaceImageAnalysis</name>
 
@@ -76,15 +76,7 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>21</source>
-                    <target>21</target>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -95,7 +87,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.michaelmckibbin.spaceimageanalysis/com.michaelmckibbin.spaceimageanalysis.ImageAnalysisApplication
+                                com.michaelmckibbin.imageanalysis/com.michaelmckibbin.imageanalysis.ImageAnalysisApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
@@ -108,22 +100,23 @@
                 </executions>
             </plugin>
             <!-- JMH Plugin for Benchmarking -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.openjdk.jmh</groupId>
-                            <artifactId>jmh-generator-annprocess</artifactId>
-                            <version>1.35</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.11.0</version>
+    <configuration>
+        <source>21</source>
+        <target>21</target>
+        <annotationProcessorPaths>
+            <path>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-annprocess</artifactId>
+                <version>1.35</version>
+            </path>
+        </annotationProcessorPaths>
+    </configuration>
+</plugin>
+
         </plugins>
     </build>
 </project>

@@ -1,4 +1,4 @@
-package com.michaelmckibbin.spaceimageanalysis;
+package com.michaelmckibbin.imageanalysis;
 
 public class UnionFind {
     private int[] parent;
