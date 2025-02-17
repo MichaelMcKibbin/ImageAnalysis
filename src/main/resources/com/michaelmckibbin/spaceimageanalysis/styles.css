@@ -1,0 +1,393 @@
+.root {
+    -fx-background-color: rgba(227, 227, 245, 0.6);
+}
+
+.button {
+    -fx-background-color: #af4c6a;
+    -fx-text-fill: #310d0d;
+    -fx-font-size: 14px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.button:pressed {
+    -fx-background-color: #d0d0d0;
+}
+
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.custom-button {
+    -fx-background-color: #2196F3;
+}
+
+
+.menu-bar {
+    -fx-background-color: rgba(206, 175, 175, 0.25);
+    -fx-border-color: rgba(6, 70, 238, 0.6);
+    -fx-border-radius: 3;
+}
+
+.menu-item {
+    -fx-background-color: rgb(206, 175, 175, 0.45);
+    -fx-border-color: rgba(6, 70, 238, 0.6);
+    -fx-border-radius: 3;
+}
+
+.menu-item:hover {
+    -fx-background-color: skyblue;
+}
+
+.menu {
+    -fx-background-color: rgba(206, 175, 175, 0.70);
+}
+
+.tree-view{
+    -fx-background-color: #b1e1f1;
+    -fx-border-radius: 3;
+}
+.tree-cell:selected {
+    -fx-background-color: #0096c9;
+    -fx-text-fill: white;
+}
+
+.VBox {
+    -fx-background-color: rgba(194, 194, 241, 0.4);
+    -fx-border-radius: 3;
+    -fx-border-width: 2;
+}
+
+.HBox {
+    -fx-background-color: rgba(194, 194, 241, 0.75);
+    -fx-border-radius: 3;
+    -fx-border-width: 2;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+}
+
+.root {
+    -fx-background-color: rgba(225, 225, 245, 0.6);
+}
+
+.label {
+    -fx-padding: 3, 2, 2, 3;
+}
+
+#mikeyFaceButton {
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-border-color: #4CAF50; /* Green */
+    -fx-text-fill: blue;
+}
+
+#mikeyFaceButton:pressed {
+    -fx-border-color: #0000FF;
+    -fx-text-fill: yellow;
+}
+
+#mikeyFaceButton:hover {
+    -fx-background-color: rgba(205, 245, 195, 0.6);
+}
+
+.button {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+    -fx-text-fill: #484848;
+}
+
+.button:hover {
+    -fx-background-color: #fcd1d1;
+}
+
+.button:pressed {
+    -fx-background-color: #d0d0d0;
+}
+
+.navigation-button-container-1 { /* style for VBox button container on storefront view */
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+    -fx-border-color: blue;
+    -fx-background-color: lightgrey;
+    -fx-pref-width: 140; /* adjust to suit buttons */
+    -fx-alignment: "CENTER";
+}
+
+.navigation-button-container-1 .button { /* style for VBox button container buttons on storefront view */
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+    -fx-border-color: blue;
+    -fx-background-color: skyblue;
+    -fx-pref-width: 130; /* adjust button width to make uniform */
+    -fx-alignment: "CENTER";
+}
+
+.navigation-button-container-1:hover {
+    -fx-background-color: rgba(210, 175, 175, 0.5);
+    -fx-border-color: blue;
+}
+
+.navigation-button-container-1 .bakery-button:hover {
+    -fx-background-color: rgba(210, 175, 175, 0.5);
+    -fx-border-color: rgb(175, 15, 15);
+
+}
+
+.menu-bar {
+    -fx-background-color: rgba(210, 175, 175, 0.25);
+    -fx-border-color: rgba(10, 70, 240, 0.6);
+    -fx-border-radius: 3;
+}
+
+.menu-item {
+    -fx-background-color: rgb(210, 175, 175, 0.45);
+    -fx-border-color: rgba(10, 70, 240, 0.6);
+    -fx-border-radius: 3;
+}
+
+.menu-item:hover {
+    -fx-background-color: skyblue;
+}
+
+.menu {
+    -fx-background-color: rgba(210, 175, 175, 0.70);
+}
+
+
+.addCaseBtnVBox { /* style for VBox button container on storefront view */
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+    -fx-border-color: blue;
+    -fx-background-color: lightgrey;
+    -fx-pref-width: 140; /* adjust to suit buttons */
+    -fx-background-color: rgba(200, 210, 240, 0.4);
+    -fx-alignment: CENTER;
+}
+
+.addCaseBtnVBox .button { /* style for VBox button container buttons on storefront view */
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+    -fx-border-color: blue;
+    -fx-background-color: skyblue;
+    -fx-pref-width: 130; /* adjust button width to make uniform */
+    -fx-alignment: "CENTER";
+}
+
+.addCaseBtnVBox:hover {
+    -fx-background-color: rgba(200, 175, 175, 0.5);
+    -fx-border-color: blue;
+}
+
+.addCaseBtnVBox .button:hover {
+    -fx-background-color: rgba(200, 175, 175, 0.5);
+    -fx-border-color: rgb(175, 15, 15);
+}
+
+.addTrayBtnVBox {
+    -fx-border-style: dotted;
+    -fx-border-radius: 3;
+    -fx-border-color: green;
+    -fx-border-width: 3;
+}
+
+.tree-cell:selected {
+    -fx-background-color: rgba(5, 100, 140, 0.7);
+    -fx-text-fill: white;
+}
+
+VBox {
+    -fx-background-color: rgba(239, 123, 164, 0.4);
+    -fx-border-radius: 3;
+    -fx-border-width: 2;
+
+}
+
+HBox {
+    -fx-background-color: rgba(165, 196, 140, 0.75);
+    -fx-border-radius: 3;
+    -fx-border-width: 2;
+}
+
+/* Dialog styling */
+.dialog-pane {
+    -fx-background-color: rgba(200, 200, 240, 0.4);
+    -fx-border-color: blue;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: rgba(200, 175, 175, 0.25);
+    -fx-border-color: blue;
+    -fx-border-width: 0 0 2 0;
+}
+
+/* Text field styling */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 3;
+    -fx-padding: 5;
+}
+
+.text-field:focused {
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2;
+}
+
+/* Table view styling */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: rgba(200, 175, 175, 0.70);
+    -fx-border-color: blue;
+    -fx-padding: 5;
+}
+
+.table-view .table-cell {
+    -fx-padding: 5;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: rgba(200, 200, 240, 0.2);
+}
+
+.table-row-cell:even {
+    -fx-background-color: rgba(200, 200, 240, 0.4);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(5, 100, 140, 0.7);
+    -fx-text-fill: white;
+}
+
+/* Scroll bar styling */
+.scroll-bar {
+    -fx-background-color: rgba(200, 200, 240, 0.4);
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(113, 192, 102, 0.7);
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(250, 186, 117, 0.9);
+}
+
+/* Tooltip styling */
+.tooltip {
+    -fx-background-color: rgba(200, 200, 240, 0.9);
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-padding: 5;
+    -fx-border-color: blue;
+    -fx-border-radius: 3;
+}
+
+/* ComboBox styling */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 3;
+}
+
+.combo-box:hover {
+    -fx-border-color: #4CAF50;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 3 5 3 5;
+}
+
+/* CheckBox styling */
+.check-box {
+    -fx-text-fill: #484848;
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 3;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #4CAF50;
+}
+
+/* Split pane styling */
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: blue;
+    -fx-padding: 0 0.5 0 0.5;
+}
+
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: blue;
+    -fx-padding: 0.5 0 0.5 0;
+}
+
+/* Error styling for input validation */
+.text-field.error {
+    -fx-border-color: #FF0000;
+    -fx-border-width: 2;
+}
+
+.error-label {
+    -fx-text-fill: #FF0000;
+    -fx-font-size: 12px;
+    -fx-padding: 2 0 0 0;
+}
+
+/* Disabled state styling */
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.5;
+    -fx-background-color: #f0f0f0;
+}
+.image-view {
+    -fx-border-color: #000000;     /* Adds a black border */
+    -fx-border-width: 2px;         /* Sets border width */
+    -fx-border-radius: 5px;        /* Rounds the corners */
+    -fx-padding: 5px;              /* Adds internal padding */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);  /* Adds shadow */
+    -fx-background-color: white;    /* Sets background color */
+}
+.image-view:hover {
+    -fx-border-color: #4286f4;     /* Changes border color on hover */
+    -fx-cursor: hand;              /* Changes cursor to hand on hover */
+}
+.image-view:pressed {
+    -fx-opacity: 0.9;              /* Slightly reduces opacity when pressed */
+}
+
+.slider {
+    -fx-pref-width: 200px;  /* Set a preferred width for each slider */
+}
+
+.slidersHbox {
+    -fx-padding: 10px;      /* Add some padding around the HBox */
+}
+.radio-button {
+    -fx-padding: 5px;
+}
+
+.radio-button:selected {
+    -fx-font-weight: bold;
+}

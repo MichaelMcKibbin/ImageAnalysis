@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michaelmckibbin.spaceimageanalysis.ImageAnalysisController">
+
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="8.0">
+    <!--menubar-->
+    <HBox>
+        <MenuBar HBox.hgrow="ALWAYS">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem fx:id="loadImage" mnemonicParsing="false" onAction="#loadImage" text="Load Image" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" text="placeholder" />
+            </Menu>
+        </MenuBar>
+    </HBox>
+    <!--            end of menubar-->
+
+
+    <HBox layoutX="22.0" layoutY="46.0" prefHeight="223.0" prefWidth="645.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
+
+   <ImageView fx:id="imageView1" fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+         </HBox.margin></ImageView>
+   <ImageView fx:id="imageView2" fitHeight="231.0" fitWidth="398.0" layoutX="300.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+         </HBox.margin></ImageView>
+      <padding>
+         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
+    <HBox fx:id="radioButtonBox" alignment="CENTER" spacing="20">
+        <RadioButton fx:id="radioRed" text="Make Red" />
+        <RadioButton fx:id="radioGreen" text="Make Green" />
+        <RadioButton fx:id="radioBlue" text="Make Blue" />
+        <RadioButton fx:id="radioDefault" text="Default Values" />
+         <Button fx:id="showOriginalImage" mnemonicParsing="false" onAction="#showOriginalImage" text="Show Original" />
+         <Button fx:id="ShowBlackAndWhiteImage" mnemonicParsing="false" onAction="#showBlackAndWhiteImage" text="B &amp; W" />
+    </HBox>
+<HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox">
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <Slider fx:id="sliderRed" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Red" />
+
+        </HBox>
+    </VBox>
+
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <Slider fx:id="sliderGreen" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Green" />
+        </HBox>
+    </VBox>
+
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <Slider fx:id="sliderBlue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="Blue" />
+        </HBox>
+    </VBox>
+</HBox>
+
+
+<HBox fx:id="slidersHbox2" alignment="CENTER" spacing="20" styleClass="slidersHbox">
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <Slider fx:id="sliderSaturation" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <Label text="Saturation" />  <!-- Changed from "Red" to "Saturation" -->
+    </VBox>
+
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <Slider fx:id="sliderBrightness" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <Label text="Brightness" />   <!-- Changed from "Red" to "Brightness" -->
+    </VBox>
+
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+        <Slider fx:id="sliderHue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <Label text="Hue" />         <!-- Changed from "Red" to "Hue" -->
+    </VBox>
+</HBox>
+      <padding>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </padding>
+
+
+
+</VBox>
+</AnchorPane>
