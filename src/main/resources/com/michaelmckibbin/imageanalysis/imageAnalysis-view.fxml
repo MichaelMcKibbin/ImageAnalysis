@@ -5,15 +5,16 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michaelmckibbin.imageanalysis.ImageAnalysisController">
+<AnchorPane prefHeight="600" prefWidth="1000" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michaelmckibbin.imageanalysis.ImageAnalysisController">
 
 
-<VBox prefHeight="600.0" prefWidth="800.0" spacing="8.0">
+<VBox prefHeight="600.0" prefWidth="1000.0" spacing="8.0">
     <!--menubar-->
     <HBox>
         <MenuBar HBox.hgrow="ALWAYS">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem fx:id="loadImage" mnemonicParsing="false" onAction="#loadImage" text="Load Image" />
+               <MenuItem fx:id="setDefaultImagesDir" mnemonicParsing="false" onAction="#setDefaultImagesDirectory" text="Set default images directory" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="placeholder" />
             </Menu>
@@ -21,74 +22,85 @@
     </HBox>
     <!--            end of menubar-->
 
+<HBox layoutX="22.0" layoutY="46.0" prefHeight="223.0" prefWidth="645.0"
+      spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+      AnchorPane.topAnchor="30.0">
+    <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+    </padding>
 
-    <HBox layoutX="22.0" layoutY="46.0" prefHeight="223.0" prefWidth="645.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
-
-   <ImageView fx:id="imageView1" fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
-         <HBox.margin>
-            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-         </HBox.margin></ImageView>
-   <ImageView fx:id="imageView2" fitHeight="231.0" fitWidth="398.0" layoutX="300.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
-         <HBox.margin>
-            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-         </HBox.margin></ImageView>
-      <padding>
-         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-      </padding>
-    </HBox>
-    <HBox fx:id="radioButtonBox" alignment="CENTER" spacing="20">
-        <RadioButton fx:id="radioRed" text="Make Red" />
-        <RadioButton fx:id="radioGreen" text="Make Green" />
-        <RadioButton fx:id="radioBlue" text="Make Blue" />
-        <RadioButton fx:id="radioDefault" text="Default Values" />
-         <Button fx:id="showOriginalImage" mnemonicParsing="false" onAction="#showOriginalImage" text="Show Original" />
-         <Button fx:id="ShowBlackAndWhiteImage" mnemonicParsing="false" onAction="#showBlackAndWhiteImage" text="B &amp; W" />
-    </HBox>
-<HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox">
-    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <Slider fx:id="sliderRed" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <HBox alignment="CENTER" spacing="10">
-            <Label text="Red" />
-
-        </HBox>
+    <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+        <children>
+            <ImageView fx:id="imageViewOriginal" fitHeight="300.0" fitWidth="300.0"
+                      pickOnBounds="true" preserveRatio="true" />
+            <Label text="Original Image" textAlignment="CENTER" visible="true" />
+        </children>
     </VBox>
 
-    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <Slider fx:id="sliderGreen" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <HBox alignment="CENTER" spacing="10">
-            <Label text="Green" />
-        </HBox>
+    <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+        <children>
+            <ImageView fx:id="imageViewProcessed" fitHeight="300.0" fitWidth="300.0"
+                      pickOnBounds="true" preserveRatio="true" />
+            <ComboBox fx:id="processorComboBox" prefWidth="150.0" />
+        </children>
     </VBox>
 
-    <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <Slider fx:id="sliderBlue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <HBox alignment="CENTER" spacing="10">
-            <Label text="Blue" />
-        </HBox>
+    <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+        <children>
+            <ImageView fx:id="imageView3" fitHeight="300.0" fitWidth="300.0"
+                      pickOnBounds="true" preserveRatio="true" />
+            <ComboBox fx:id="processorComboBox2" prefWidth="150.0" />
+        </children>
     </VBox>
 </HBox>
+
+
+      <HBox fx:id="spareHBoxForSliders" prefHeight="100.0" prefWidth="200.0" />
+
+    <HBox fx:id="imageChoicesBox" alignment="CENTER" spacing="20">
+        <Button onAction="#onDefaultSettingsButtonClick" text="Default Settings">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin></Button>
+
+    </HBox>
 
 
 <HBox fx:id="slidersHbox2" alignment="CENTER" spacing="20" styleClass="slidersHbox">
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
         <Slider fx:id="sliderSaturation" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <Label text="Saturation" />  <!-- Changed from "Red" to "Saturation" -->
+        <Label text="Saturation" />
     </VBox>
 
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
         <Slider fx:id="sliderBrightness" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <Label text="Brightness" />   <!-- Changed from "Red" to "Brightness" -->
+        <Label text="Brightness" />
     </VBox>
 
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
         <Slider fx:id="sliderHue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <Label text="Hue" />         <!-- Changed from "Red" to "Hue" -->
+        <Label text="Hue" />
     </VBox>
 </HBox>
+    <HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox">
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderRed" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Label text="Red" />
+        </VBox>
+
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderGreen" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Label text="Green" />
+        </VBox>
+
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderBlue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Label text="Blue" />
+        </VBox>
+    </HBox>
       <padding>
          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
       </padding>
-
 
 
 </VBox>

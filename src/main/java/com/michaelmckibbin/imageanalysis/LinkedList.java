@@ -1,26 +1,57 @@
 package com.michaelmckibbin.imageanalysis;
 
-// my version of a linked list
-
 import java.io.Serializable;
-import java.util.Iterator;
+import java.util.*;
+
+/**
+ * A generic singly linked list implementation that stores elements of type N.
+ * This implementation maintains both head and tail references for efficient
+ * operations at both ends of the list.
+ *
+ * <p>This linked list supports basic operations such as:
+ * <ul>
+ *     <li>Adding elements at the start or end</li>
+ *     <li>Removing elements from any position</li>
+ *     <li>Inserting elements at any position</li>
+ *     <li>Traversing the list</li>
+ * </ul>
+ *
+ * @param <N> the type of elements held in this linked list
+ */
 
 public class LinkedList<N> implements Iterable<N>, Serializable {
 
     private Node<N> head;
     private Node<N> tail;
 
+
+    /**
+     * Removes all elements from the list.
+     * After this operation, the list will be empty.
+     */
     public void clear() {
         head = null;
         tail = null;
         System.out.println("List has been cleared");
     }
 
+    /**
+     * Represents a node in the linked list.
+     * Each node contains the data element and a reference to the next node.
+     *
+     * @param <N> the type of data stored in the node
+     */
 
     // inner class
     private static class Node<N> implements Serializable {
         N data;
         Node<N> next;
+
+        /**
+         * Constructs a new node with the given data.
+         *
+         * @param data the element to be stored in this node
+         */
 
         Node(N data) {
             this.data = data;
@@ -33,6 +64,13 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         this.tail = null;
     }
 
+
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     * The returned iterator is fail-fast.
+     *
+     * @return an iterator over the elements in this list
+     */
 
     @Override
     public Iterator<N> iterator() {
@@ -69,6 +107,13 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
 
     }
 
+    /**
+     * Adds an element to the beginning of the list.
+     *
+     * @param item the element to add
+     * @throws NullPointerException if the specified element is null
+     */
+
     public void addFirst(N item) {
 
         Node<N> newNode = new Node<>(item);
@@ -103,27 +148,43 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         }
     }
 
-    public void getFirst() {
+
+    /**
+     * Retrieves the first element in the list.
+     *
+     * @return the first element in the list
+     * @throws NoSuchElementException if the list is empty
+     */
+    public N getFirst() {
         if (isEmpty()) {
-            System.out.println("List is empty");
-        } else {
-            System.out.println("First item: " + head.data);
+            throw new NoSuchElementException("List is empty");
         }
+        return head.data;
     }
 
-    public void getLast() {
+    /**
+     * Retrieves the last element in the list.
+     * @return
+     * @throws NoSuchElementException if the list is empty
+     */
+    public N getLast() {
         if (isEmpty()) {
-            System.out.println("List is empty");
-        } else {
-            System.out.println("Last item: " + tail.data);
+            throw new NoSuchElementException("List is empty");
         }
+        return tail.data;
     }
 
-    // insert item at index
+    /**
+     * Inserts an element at the specified position in the list.
+     *
+     * @param index the position at which to insert the element
+     * @param item the element to insert
+     * @throws IndexOutOfBoundsException if the index is out of range (index < 0)
+     * @throws NullPointerException if the specified element is null
+     */
     public void insertAt(int index, N item) {
         if (index < 0) {
-            System.out.println("Invalid index");
-            return;
+            throw new IndexOutOfBoundsException("Index cannot be negative!");
         }
         if (index == 0) {
             addFirst(item);
@@ -133,14 +194,12 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         Node<N> current = head;
         for (int i = 0; i < index - 1; i++) {
             if (current == null) {
-                System.out.println("Invalid index");
-                return;
+                throw new IndexOutOfBoundsException("Index: " + index + " is out of bounds");
             }
             current = current.next;
         }
         if (current == null) {
-            System.out.println("Invalid index");
-            return;
+            throw new IndexOutOfBoundsException("Index cannot be null!");
         }
         newNode.next = current.next;
         current.next = newNode;
@@ -285,18 +344,15 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         }
     }
 
-    // Contains using ==
-    // delete when sure not needed
-//    public boolean contains(N item) {
-//        Node<N> current = head;
-//        while (current != null) {
-//            if (current.data == item) { // using ==
-//                return true;
-//            }
-//            current = current.next;
-//        }
-//        return false;
-//    }
+
+
+    /**
+     * Checks if the list contains a specific element.
+     * Uses equals() method for comparison.
+     *
+     * @param item the element to search for
+     * @return true if the list contains the specified element, false otherwise
+     */
 
     //    Contains using equals()
     public boolean contains(N item) {
@@ -326,10 +382,15 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         return -1;
     }
 
-    // check if list is empty
+    /**
+     * Checks if the list is empty.
+     *
+     * @return true if the list contains no elements, false otherwise
+     */
     public boolean isEmpty() {
         return head == null;
     }
+
 
     // add at index
     public void add(int index, N item) {
@@ -397,24 +458,56 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         current.next = current.next.next;
     }
 
+    public void deleteAt(int index) {
+        if (index < 0 || head == null) {
+            throw new IndexOutOfBoundsException();
+        }
 
-    // get at index
-    public N get(int index) {
-        if (index < 0) {
-            throw new IndexOutOfBoundsException("Try 0 or a positive number!");
+        if (index == 0) {
+            head = head.next;
+            if (head == null) {
+                tail = null;
+            }
+            return;
         }
 
         Node<N> current = head;
         int currentIndex = 0;
-
-        while (current != null) {
-            if (currentIndex == index) {
-                return current.data;
-            }
+        while (current != null && currentIndex < index - 1) {
+            current = current.next;
             currentIndex++;
+        }
+
+        if (current == null || current.next == null) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (current.next == tail) {
+            tail = current;
+        }
+        current.next = current.next.next;
+    }
+
+
+    // get at index
+    public N get(int index) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("Index cannot be negative");
+        }
+        if (isEmpty()) {
+            throw new NoSuchElementException("Cannot get element from empty list");
+        }
+        Node<N> current = head;
+        for (int i = 0; i < index; i++) {
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Index: " + index + " is out of bounds");
+            }
             current = current.next;
         }
-        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+        if (current == null) {
+            throw new IndexOutOfBoundsException("Index: " + index + " is out of bounds");
+        }
+        return current.data;
     }
 
 
@@ -429,6 +522,44 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
         }
         return array;
     }
+
+    public void addAll(Collection<? extends N> collection) {
+        for (N item : collection) {
+            add(item);
+        }
+    }
+
+    public List<N> toList() {
+        List<N> list = new ArrayList<>();
+        for (N item : this) {
+            list.add(item);
+        }
+        return list;
+    }
+
+    public N peekFirst() {
+    return isEmpty() ? null : head.data;
+}
+
+public N peekLast() {
+    return isEmpty() ? null : tail.data;
+}
+
+public void reverse() {
+    Node<N> prev = null;
+    Node<N> current = head;
+    Node<N> next;
+    tail = head;
+
+    while (current != null) {
+        next = current.next;
+        current.next = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
+}
+
 
 
 }

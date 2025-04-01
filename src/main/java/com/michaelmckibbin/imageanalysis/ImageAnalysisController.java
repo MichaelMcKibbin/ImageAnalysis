@@ -1,5 +1,6 @@
 package com.michaelmckibbin.imageanalysis;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,132 +9,377 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.util.StringConverter;
 
 
 public class ImageAnalysisController {
+    @FXML public HBox slidersHbox1;
+    @FXML public HBox slidersHbox2;
+    @FXML public HBox radioButtonBox;
+    @FXML public ImageView imageView3;
+    @FXML public MenuItem loadImage;
+    @FXML public MenuItem setDefaultImagesDir;
+    @FXML public HBox imageChoicesBox;
+    @FXML public HBox spareHBoxForSliders;
+    @FXML private ImageView imageViewOriginal;
+    @FXML private ImageView imageViewProcessed;
 
-    public MenuItem loadImage;
-    public ImageView originalImage;
-    public ImageView adjustedImage;
-    public HBox radioButtonBox;
-    public Button showOriginalImage;
-    public Button ShowBlackAndWhiteImage;
-    public HBox slidersHbox1;
-    public HBox slidersHbox2;
-    public ImageView imageView2;
-    public ImageView imageView1;
-    @FXML
-    private Slider sliderBrightness;
-    @FXML
-    private Slider sliderHue;
-    @FXML
-    private Slider sliderSaturation;
-    @FXML
-    private RadioButton radioRed;
-    @FXML
-    private RadioButton radioGreen;
-    @FXML
-    private RadioButton radioBlue;
-    @FXML
-    private RadioButton radioDefault;
-    @FXML
-    private Slider sliderRed;
-    @FXML
-    private Slider sliderGreen;
-    @FXML
-    private Slider sliderBlue;
+    @FXML private ComboBox<ImageProcessor> processorComboBox;
+    @FXML private ComboBox<ImageProcessor> processorComboBox2;
+
+
+    // Sliders
+    @FXML private Slider sliderBrightness;
+    @FXML private Slider sliderHue;
+    @FXML private Slider sliderSaturation;
+    @FXML private Slider sliderRed;
+    @FXML private Slider sliderGreen;
+    @FXML private Slider sliderBlue;
+
+    private List<ImageProcessor> imageProcessors;
+    private File defaultImageDirectory;
 
     @FXML
-    public void initialize() {
+    private void initialize() {
+        setupProcessors();
+        setupSliderDefaults();
+        setupSliderListeners();
+        initializeDefaultDirectory();
+    }
+private void setupProcessors() {
+    // Clear any existing items first
+    processorComboBox.getItems().clear();
+    processorComboBox.setPromptText("Choose process");  // Updated prompt text
+    processorComboBox2.getItems().clear();
+    processorComboBox2.setPromptText("Choose process"); // Updated prompt text
 
-        // Set default values for slidersHbox2
-        sliderSaturation.setValue(75);
-        sliderBrightness.setValue(75);
-        sliderHue.setValue(75);
+    // Initialize the list if not already done
+    imageProcessors = new ArrayList<>();
 
-        // initial values for slidersHbox1
-        final double DEFAULT_VALUE = 50;
+    // Add processors only once
+    imageProcessors.add(new BlackAndWhiteProcessor());
+    imageProcessors.add(new GrayscaleProcessor());
+    imageProcessors.add(new SepiaProcessor());
+    imageProcessors.add(new BloodCellProcessor());
+    imageProcessors.add(new TricolourBloodProcessor());
+    // Add other processors as needed
 
-        ToggleGroup colorGroup = new ToggleGroup();
-        radioRed.setToggleGroup(colorGroup);
-        radioGreen.setToggleGroup(colorGroup);
-        radioBlue.setToggleGroup(colorGroup);
-        radioDefault.setToggleGroup(colorGroup);
+    // Add all processors to combo boxes at once
+    processorComboBox.getItems().addAll(imageProcessors);
+    processorComboBox2.getItems().addAll(imageProcessors);
 
-        // Set initial selection to Default
-        radioDefault.setSelected(true);
+    // Set up the combo box display
+    StringConverter<ImageProcessor> converter = new StringConverter<ImageProcessor>() {
+        @Override
+        public String toString(ImageProcessor processor) {
+            return processor != null ? processor.getProcessorName() : "";
+        }
+        @Override
+        public ImageProcessor fromString(String string) {
+            return null; // Not needed for ComboBox
+        }
+    };
 
-        colorGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == radioDefault) {
-                sliderRed.setValue(DEFAULT_VALUE);
-                sliderGreen.setValue(DEFAULT_VALUE);
-                sliderBlue.setValue(DEFAULT_VALUE);
-            } else if (newValue == radioRed) {
-                sliderRed.setValue(sliderRed.getMax());
-                sliderGreen.setValue(sliderGreen.getMin());
-                sliderBlue.setValue(sliderBlue.getMin());
-            } else if (newValue == radioGreen) {
-                sliderRed.setValue(sliderRed.getMin());
-                sliderGreen.setValue(sliderGreen.getMax());
-                sliderBlue.setValue(sliderBlue.getMin());
-            } else if (newValue == radioBlue) {
-                sliderRed.setValue(sliderRed.getMin());
-                sliderGreen.setValue(sliderGreen.getMin());
-                sliderBlue.setValue(sliderBlue.getMax());
+    processorComboBox.setConverter(converter);
+    processorComboBox2.setConverter(converter);
+
+    // Remove automatic selection
+    // processorComboBox.getSelectionModel().selectFirst();  // Comment out or remove these lines
+    // processorComboBox2.getSelectionModel().selectFirst(); // Comment out or remove these lines
+
+    // Clear any default selection
+    processorComboBox.getSelectionModel().clearSelection();
+    processorComboBox2.getSelectionModel().clearSelection();
+
+    // Add listener to combo boxes for processor changes
+    processorComboBox.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldVal, newVal) -> {
+                if (newVal != null) {  // Add null check
+                    if (newVal instanceof BlackAndWhiteProcessor) {
+                        // Special defaults for Black & White
+                        sliderBrightness.setValue(25);
+                        sliderRed.setValue(50);
+                        sliderGreen.setValue(50);
+                        sliderBlue.setValue(50);
+                    } else {
+                        // Default values for other processors
+                        sliderBrightness.setValue(0);
+                        sliderRed.setValue(100);
+                        sliderGreen.setValue(100);
+                        sliderBlue.setValue(100);
+                    }
+                    updatePrimaryImage();
+                }
             }
-        });
+    );
+
+    processorComboBox2.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldVal, newVal) -> {
+                if (newVal != null) {  // Add null check
+                    if (newVal instanceof BlackAndWhiteProcessor) {
+                        // Special defaults for Black & White
+                        sliderBrightness.setValue(25);
+                        sliderRed.setValue(50);
+                        sliderGreen.setValue(50);
+                        sliderBlue.setValue(50);
+                    } else {
+                        // Default values for other processors
+                        sliderBrightness.setValue(0);
+                        sliderRed.setValue(100);
+                        sliderGreen.setValue(100);
+                        sliderBlue.setValue(100);
+                    }
+                    updateSecondaryImage();
+                }
+            }
+    );
+}
+
+
+    private void setupSliderDefaults() {
+        // Brightness: -100 to 100 (will be converted to -1.0 to 1.0 in processing)
+        sliderBrightness.setMin(-100);
+        sliderBrightness.setMax(100);
+        sliderBrightness.setValue(0);
+
+        // RGB: 0 to 200 (will be converted to 0.0 to 2.0 in processing)
+        sliderRed.setMin(0);
+        sliderRed.setMax(200);
+        sliderRed.setValue(100);    // 100 = 1.0 multiplier
+
+        sliderGreen.setMin(0);
+        sliderGreen.setMax(200);
+        sliderGreen.setValue(100);
+
+        sliderBlue.setMin(0);
+        sliderBlue.setMax(200);
+        sliderBlue.setValue(100);
+
+        // Optional: add labels to show current values
+        addValueLabel(sliderBrightness, "Brightness: ");
+        addValueLabel(sliderRed, "Red: ");
+        addValueLabel(sliderGreen, "Green: ");
+        addValueLabel(sliderBlue, "Blue: ");
+    }
+
+    private void addValueLabel(Slider slider, String prefix) {
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setBlockIncrement(10);
+    }
+
+
+    private void updateImage() {
+        ImageProcessor selectedProcessor = processorComboBox.getValue();
+        if (selectedProcessor != null && imageViewOriginal.getImage() != null) {
+            // Debug output
+            System.out.println("Updating image with processor: " + selectedProcessor.getProcessorName());
+            System.out.println("Current slider values:");
+            System.out.println("Brightness: " + sliderBrightness.getValue());
+            System.out.println("Red: " + sliderRed.getValue());
+            System.out.println("Green: " + sliderGreen.getValue());
+            System.out.println("Blue: " + sliderBlue.getValue());
+
+            ProcessingParameters params = createProcessingParameters();
+            Image processedImage = selectedProcessor.processImage(imageViewOriginal.getImage(), params);
+            imageViewProcessed.setImage(processedImage);
+        }
+        // Handle second processor and imageView3
+        ImageProcessor selectedProcessor2 = processorComboBox2.getValue();
+        if (selectedProcessor2 != null && imageViewOriginal.getImage() != null) {
+            // Debug output
+            System.out.println("Updating image3 with processor: " + selectedProcessor2.getProcessorName());
+
+            ProcessingParameters params = createProcessingParameters();
+            Image processedImage = selectedProcessor2.processImage(imageViewOriginal.getImage(), params);
+            imageView3.setImage(processedImage);
+        }
+    }
+
+    private void updatePrimaryImage() {
+        ImageProcessor selectedProcessor = processorComboBox.getValue();
+        if (selectedProcessor != null && imageViewOriginal.getImage() != null) {
+            // Debug output
+            System.out.println("Updating primary image with processor: " + selectedProcessor.getProcessorName());
+            System.out.println("Current slider values:");
+            System.out.println("Brightness: " + sliderBrightness.getValue());
+            System.out.println("Red: " + sliderRed.getValue());
+            System.out.println("Green: " + sliderGreen.getValue());
+            System.out.println("Blue: " + sliderBlue.getValue());
+
+            ProcessingParameters params = createProcessingParameters();
+            Image processedImage = selectedProcessor.processImage(imageViewOriginal.getImage(), params);
+            imageViewProcessed.setImage(processedImage);
+        }
+    }
+
+    private void updateSecondaryImage() {
+        ImageProcessor selectedProcessor = processorComboBox2.getValue();
+        if (selectedProcessor != null && imageViewOriginal.getImage() != null) {
+            // Debug output
+            System.out.println("Updating secondary image with processor: " + selectedProcessor.getProcessorName());
+
+            ProcessingParameters params = createProcessingParameters();
+            Image processedImage = selectedProcessor.processSecondaryImage(imageViewOriginal.getImage());
+            imageView3.setImage(processedImage);
+        }
+    }
+
+
+
+    private ProcessingParameters createProcessingParameters() {
+        return new ProcessingParameters(
+                sliderBrightness.getValue() / 100.0,  // Convert to -1.0 to 1.0
+                0.0, // saturation
+                0.0, // hue
+                sliderRed.getValue() / 100.0,    // Convert to 0.0 to 2.0
+                sliderGreen.getValue() / 100.0,
+                sliderBlue.getValue() / 100.0
+        );
+
+    }
+
+
+
+
+    private void resetSlidersToDefault() {
+        ImageProcessor currentProcessor = processorComboBox.getValue();
+        if (currentProcessor != null) {
+            ProcessingParameters defaults;
+
+            if (currentProcessor instanceof BlackAndWhiteProcessor) {
+                sliderBrightness.setValue(25);
+                sliderRed.setValue(50);
+                sliderGreen.setValue(50);
+                sliderBlue.setValue(50);
+                // Hide or disable color-related sliders
+                sliderHue.setDisable(true);
+                sliderSaturation.setDisable(true);
+            }
+            else if (currentProcessor instanceof GrayscaleProcessor) {
+                defaults = ProcessingParameters.getDefaultGrayscale();
+                // Hide or disable color-related sliders
+                sliderHue.setDisable(true);
+                sliderSaturation.setDisable(true);
+            }
+            else if (currentProcessor instanceof SepiaProcessor) {
+                defaults = ProcessingParameters.getDefaultSepia();
+                // Enable all sliders for Sepia
+                sliderHue.setDisable(false);
+                sliderSaturation.setDisable(false);
+            }
+            else if (currentProcessor instanceof BloodCellProcessor) {
+                defaults = ProcessingParameters.getDefaultBloodCellDetection();
+                // Enable all sliders for BloodCell Detection
+                sliderHue.setDisable(false);
+                sliderSaturation.setDisable(false);
+
+            } else {
+                sliderBrightness.setValue(0);
+                sliderRed.setValue(100);
+                sliderGreen.setValue(100);
+                sliderBlue.setValue(100);
+            }
+            updateImage();
+        }
+    }
+
+
+
+
+private void setupSliderListeners() {
+    // Create a list of all sliders
+    List<Slider> sliders = Arrays.asList(
+        sliderBrightness,
+        sliderHue,
+        sliderSaturation,
+        sliderRed,
+        sliderGreen,
+        sliderBlue
+    );
+
+    // Add listener to each slider
+    sliders.forEach(slider ->
+        slider.valueProperty().addListener((obs, oldVal, newVal) -> updateImage())
+    );
+}
+
+    private void initializeDefaultDirectory() {
+        defaultImageDirectory = new File(System.getProperty("user.dir") +
+            "/src/main/resources/com/michaelmckibbin/imageanalysis/images");
+        if (!defaultImageDirectory.exists()) {
+            defaultImageDirectory = new File(System.getProperty("user.home"));
+        }
+    }
+
+    private void processImage(ImageProcessor processor) {
+        if (imageViewOriginal.getImage() != null) {
+            ProcessingParameters params = createProcessingParameters();
+            Image processedImage = processor.processImage(imageViewOriginal.getImage(), params);
+            imageViewProcessed.setImage(processedImage);
+        }
     }
 
     public void loadImage(ActionEvent actionEvent) {
+        FileChooser fileChooser = createConfiguredFileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+        loadSelectedFile(selectedFile);
+    }
+
+    private FileChooser createConfiguredFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image File");
-
-        // Set initial directory to the images folder
-        // need to choose whether to use system pictures folder or project images folder as default...
-        //String userHome = System.getProperty("user.home");
-        //File imagesDir = new File(userHome + "/Pictures");  // Default to user's Pictures folder
-        File imagesDir = new File("src/main/resources/images"); // Default to project images folder
-
-        if (imagesDir.exists()) {
-            fileChooser.setInitialDirectory(imagesDir);
-        }
-
-        // Set filters for image files
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        fileChooser.setInitialDirectory(defaultImageDirectory);
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
         );
+        return fileChooser;
+    }
 
-        // Show file chooser dialog
-        File selectedFile = fileChooser.showOpenDialog(null);
-
+    private void loadSelectedFile(File selectedFile) {
         if (selectedFile != null) {
             try {
-                // Convert the file path to URL format
                 String imageUrl = selectedFile.toURI().toURL().toExternalForm();
-                Image image = new Image(imageUrl);
-
-                // Assuming you have an ImageView named 'imageViewer' in your FXML
-                // Replace 'imageViewer' with your actual ImageView variable name
-                imageView1.setImage(image);
-
+                imageViewOriginal.setImage(new Image(imageUrl));
             } catch (MalformedURLException e) {
+                showErrorAlert("Image Loading Error", "Could not load the selected image.");
                 e.printStackTrace();
-                // Handle the error appropriately, perhaps show an alert to the user
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Image Loading Error");
-                alert.setContentText("Could not load the selected image.");
-                alert.showAndWait();
             }
         }
     }
 
-
-    public void showOriginalImage(ActionEvent actionEvent) {
+    private void showErrorAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
-    public void showBlackAndWhiteImage(ActionEvent actionEvent) {
+
+
+    public void setDefaultImagesDirectory(ActionEvent actionEvent) {
     }
+
+    // Add a reset button handler
+//    @FXML
+//    public void onDefaultSettingsButtonClick(ActionEvent actionEvent) {
+//        resetSlidersToDefault();
+//        updateImage();
+//    }
+    @FXML
+public void onDefaultSettingsButtonClick(ActionEvent actionEvent) {
+    sliderBrightness.setValue(0);
+    sliderRed.setValue(100);
+    sliderGreen.setValue(100);
+    sliderBlue.setValue(100);
+    updateImage();
+}
+
 }
