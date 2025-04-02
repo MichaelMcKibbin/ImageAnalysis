@@ -43,6 +43,8 @@ public class ImageAnalysisController {
     private List<ImageProcessor> imageProcessors;
     private File defaultImageDirectory;
 
+    private TricolourBloodProcessor tricolourProcessor;
+
     @FXML
     private void initialize() {
         setupProcessors();
@@ -55,6 +57,12 @@ private void setupProcessors() {
     processorComboBox.getItems().clear();
     processorComboBox.setPromptText("Choose process");  // Updated prompt text
 
+    // Initialize the TricolourBloodProcessor with callback
+    tricolourProcessor = new TricolourBloodProcessor();
+    tricolourProcessor.setImageDisplayCallback(image -> {
+        imageViewProcessed.setImage(image);
+    });
+
 
     // Initialize the list if not already done
     imageProcessors = new ArrayList<>();
@@ -65,6 +73,7 @@ private void setupProcessors() {
     imageProcessors.add(new GrayscaleProcessor());
     imageProcessors.add(new SepiaProcessor());
     imageProcessors.add(new BloodCellProcessor());
+    imageProcessors.add(tricolourProcessor);
     imageProcessors.add(new TricolourBloodProcessor());
     imageProcessors.add(new UnionFindBloodCellProcessor());
 

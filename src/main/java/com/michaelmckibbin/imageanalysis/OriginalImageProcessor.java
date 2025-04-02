@@ -97,6 +97,6 @@ public class OriginalImageProcessor implements ImageProcessor {
 
     @Override
     public String getProcessorName() {
-        return "Original Image";
+        return "Image Copy - Bright";
     }
 }
