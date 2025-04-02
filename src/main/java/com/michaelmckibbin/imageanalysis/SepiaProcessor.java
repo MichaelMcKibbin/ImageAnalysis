@@ -112,11 +112,6 @@ public class SepiaProcessor implements ImageProcessor {
         return processImage(originalImage, ProcessingParameters.getDefaultSepia());
     }
 
-    @Override
-    public Image processSecondaryImage(Image originalImage) {
-        // You might want to show original colors or another useful visualization
-        return processImage(originalImage); // Simple default implementation
-    }
 
     @Override
     public String getProcessorName() {

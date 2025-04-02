@@ -22,40 +22,28 @@
     </HBox>
     <!--            end of menubar-->
 
-<HBox layoutX="22.0" layoutY="46.0" prefHeight="223.0" prefWidth="645.0"
-      spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
-      AnchorPane.topAnchor="30.0">
+<HBox layoutX="22.0" layoutY="46.0" prefHeight="223.0" prefWidth="645.0" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
     <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
     </padding>
 
     <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
         <children>
-            <ImageView fx:id="imageViewOriginal" fitHeight="300.0" fitWidth="300.0"
-                      pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageViewOriginal" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
             <Label text="Original Image" textAlignment="CENTER" visible="true" />
         </children>
     </VBox>
 
     <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
         <children>
-            <ImageView fx:id="imageViewProcessed" fitHeight="300.0" fitWidth="300.0"
-                      pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageViewProcessed" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
             <ComboBox fx:id="processorComboBox" prefWidth="150.0" />
-        </children>
-    </VBox>
-
-    <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
-        <children>
-            <ImageView fx:id="imageView3" fitHeight="300.0" fitWidth="300.0"
-                      pickOnBounds="true" preserveRatio="true" />
-            <ComboBox fx:id="processorComboBox2" prefWidth="150.0" />
         </children>
     </VBox>
 </HBox>
 
 
-      <HBox fx:id="spareHBoxForSliders" prefHeight="100.0" prefWidth="200.0" />
+
 
     <HBox fx:id="imageChoicesBox" alignment="CENTER" spacing="20">
         <Button onAction="#onDefaultSettingsButtonClick" text="Default Settings">
@@ -65,6 +53,27 @@
 
     </HBox>
 
+    <HBox fx:id="slidersHbox3" alignment="CENTER" spacing="20" styleClass="slidersHbox">
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderRedCellSensitivity" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Label text="Red Cell Sensitivity" />
+        </VBox>
+
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderWhiteCellSensitivity" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Label text="White Cell Sensitivity" />
+        </VBox>
+
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Slider fx:id="sliderCellSizeThreshold"
+                    min="0"
+                    max="100"
+                    value="10"
+                    blockIncrement="1"
+            />
+            <Label text="Cell Size Threshold" />
+        </VBox>
+    </HBox>
 
 <HBox fx:id="slidersHbox2" alignment="CENTER" spacing="20" styleClass="slidersHbox">
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">

@@ -21,18 +21,13 @@ import javafx.util.StringConverter;
 public class ImageAnalysisController {
     @FXML public HBox slidersHbox1;
     @FXML public HBox slidersHbox2;
-    @FXML public HBox radioButtonBox;
-    @FXML public ImageView imageView3;
+    @FXML public HBox slidersHbox3;
     @FXML public MenuItem loadImage;
     @FXML public MenuItem setDefaultImagesDir;
     @FXML public HBox imageChoicesBox;
-    @FXML public HBox spareHBoxForSliders;
-    @FXML private ImageView imageViewOriginal;
+       @FXML private ImageView imageViewOriginal;
     @FXML private ImageView imageViewProcessed;
-
     @FXML private ComboBox<ImageProcessor> processorComboBox;
-    @FXML private ComboBox<ImageProcessor> processorComboBox2;
-
 
     // Sliders
     @FXML private Slider sliderBrightness;
@@ -41,6 +36,9 @@ public class ImageAnalysisController {
     @FXML private Slider sliderRed;
     @FXML private Slider sliderGreen;
     @FXML private Slider sliderBlue;
+    @FXML public Slider sliderRedCellSensitivity;
+    @FXML public Slider sliderWhiteCellSensitivity;
+    @FXML public Slider sliderCellSizeThreshold;
 
     private List<ImageProcessor> imageProcessors;
     private File defaultImageDirectory;
@@ -56,8 +54,7 @@ private void setupProcessors() {
     // Clear any existing items first
     processorComboBox.getItems().clear();
     processorComboBox.setPromptText("Choose process");  // Updated prompt text
-    processorComboBox2.getItems().clear();
-    processorComboBox2.setPromptText("Choose process"); // Updated prompt text
+
 
     // Initialize the list if not already done
     imageProcessors = new ArrayList<>();
@@ -72,7 +69,7 @@ private void setupProcessors() {
 
     // Add all processors to combo boxes at once
     processorComboBox.getItems().addAll(imageProcessors);
-    processorComboBox2.getItems().addAll(imageProcessors);
+
 
     // Set up the combo box display
     StringConverter<ImageProcessor> converter = new StringConverter<ImageProcessor>() {
@@ -87,7 +84,7 @@ private void setupProcessors() {
     };
 
     processorComboBox.setConverter(converter);
-    processorComboBox2.setConverter(converter);
+
 
     // Remove automatic selection
     // processorComboBox.getSelectionModel().selectFirst();  // Comment out or remove these lines
@@ -95,7 +92,7 @@ private void setupProcessors() {
 
     // Clear any default selection
     processorComboBox.getSelectionModel().clearSelection();
-    processorComboBox2.getSelectionModel().clearSelection();
+
 
     // Add listener to combo boxes for processor changes
     processorComboBox.getSelectionModel().selectedItemProperty().addListener(
@@ -119,26 +116,7 @@ private void setupProcessors() {
             }
     );
 
-    processorComboBox2.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldVal, newVal) -> {
-                if (newVal != null) {  // Add null check
-                    if (newVal instanceof BlackAndWhiteProcessor) {
-                        // Special defaults for Black & White
-                        sliderBrightness.setValue(25);
-                        sliderRed.setValue(50);
-                        sliderGreen.setValue(50);
-                        sliderBlue.setValue(50);
-                    } else {
-                        // Default values for other processors
-                        sliderBrightness.setValue(0);
-                        sliderRed.setValue(100);
-                        sliderGreen.setValue(100);
-                        sliderBlue.setValue(100);
-                    }
-                    updateSecondaryImage();
-                }
-            }
-    );
+
 }
 
 
@@ -161,11 +139,27 @@ private void setupProcessors() {
         sliderBlue.setMax(200);
         sliderBlue.setValue(100);
 
+        sliderWhiteCellSensitivity.setMin(0);
+        sliderWhiteCellSensitivity.setMax(100);
+        sliderWhiteCellSensitivity.setValue(40);  // default value
+
+        sliderRedCellSensitivity.setMin(0);
+        sliderRedCellSensitivity.setMax(100);
+        sliderRedCellSensitivity.setValue(60);  // default value
+
+        sliderCellSizeThreshold.setMin(0);
+        sliderCellSizeThreshold.setMax(100);
+        sliderCellSizeThreshold.setValue(50);  // default value
+
         // Optional: add labels to show current values
         addValueLabel(sliderBrightness, "Brightness: ");
         addValueLabel(sliderRed, "Red: ");
         addValueLabel(sliderGreen, "Green: ");
         addValueLabel(sliderBlue, "Blue: ");
+        addValueLabel(sliderWhiteCellSensitivity, "White Cell Sensitivity: ");
+        addValueLabel(sliderRedCellSensitivity, "Red Cell Sensitivity: ");
+        addValueLabel(sliderCellSizeThreshold, "Cell Size Threshold: ");
+
     }
 
     private void addValueLabel(Slider slider, String prefix) {
@@ -185,21 +179,15 @@ private void setupProcessors() {
             System.out.println("Red: " + sliderRed.getValue());
             System.out.println("Green: " + sliderGreen.getValue());
             System.out.println("Blue: " + sliderBlue.getValue());
+            System.out.println("White Cell Sensitivity: " + sliderWhiteCellSensitivity.getValue());
+            System.out.println("Red Cell Sensitivity: " + sliderRedCellSensitivity.getValue());
+            System.out.println("Cell Size Threshold: " + sliderCellSizeThreshold.getValue());
 
             ProcessingParameters params = createProcessingParameters();
             Image processedImage = selectedProcessor.processImage(imageViewOriginal.getImage(), params);
             imageViewProcessed.setImage(processedImage);
         }
-        // Handle second processor and imageView3
-        ImageProcessor selectedProcessor2 = processorComboBox2.getValue();
-        if (selectedProcessor2 != null && imageViewOriginal.getImage() != null) {
-            // Debug output
-            System.out.println("Updating image3 with processor: " + selectedProcessor2.getProcessorName());
 
-            ProcessingParameters params = createProcessingParameters();
-            Image processedImage = selectedProcessor2.processImage(imageViewOriginal.getImage(), params);
-            imageView3.setImage(processedImage);
-        }
     }
 
     private void updatePrimaryImage() {
@@ -212,6 +200,9 @@ private void setupProcessors() {
             System.out.println("Red: " + sliderRed.getValue());
             System.out.println("Green: " + sliderGreen.getValue());
             System.out.println("Blue: " + sliderBlue.getValue());
+            System.out.println("White Cell Sensitivity: " + sliderWhiteCellSensitivity.getValue());
+            System.out.println("Red Cell Sensitivity: " + sliderRedCellSensitivity.getValue());
+            System.out.println("Cell Size Threshold: " + sliderCellSizeThreshold.getValue());
 
             ProcessingParameters params = createProcessingParameters();
             Image processedImage = selectedProcessor.processImage(imageViewOriginal.getImage(), params);
@@ -219,17 +210,7 @@ private void setupProcessors() {
         }
     }
 
-    private void updateSecondaryImage() {
-        ImageProcessor selectedProcessor = processorComboBox2.getValue();
-        if (selectedProcessor != null && imageViewOriginal.getImage() != null) {
-            // Debug output
-            System.out.println("Updating secondary image with processor: " + selectedProcessor.getProcessorName());
 
-            ProcessingParameters params = createProcessingParameters();
-            Image processedImage = selectedProcessor.processSecondaryImage(imageViewOriginal.getImage());
-            imageView3.setImage(processedImage);
-        }
-    }
 
 
 
@@ -240,7 +221,12 @@ private void setupProcessors() {
                 0.0, // hue
                 sliderRed.getValue() / 100.0,    // Convert to 0.0 to 2.0
                 sliderGreen.getValue() / 100.0,
-                sliderBlue.getValue() / 100.0
+                sliderBlue.getValue() / 100.0,
+                sliderRedCellSensitivity.getValue(),
+                sliderWhiteCellSensitivity.getValue(),
+                sliderCellSizeThreshold.getValue()
+
+
         );
 
     }
@@ -301,7 +287,10 @@ private void setupSliderListeners() {
         sliderSaturation,
         sliderRed,
         sliderGreen,
-        sliderBlue
+        sliderBlue,
+        sliderWhiteCellSensitivity,
+        sliderRedCellSensitivity,
+        sliderCellSizeThreshold
     );
 
     // Add listener to each slider

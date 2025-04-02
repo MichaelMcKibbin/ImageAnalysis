@@ -14,7 +14,7 @@ import java.util.List;
 public interface ImageProcessor {
     Image processImage(Image originalImage, ProcessingParameters params);
     Image processImage(Image originalImage);
-    Image processSecondaryImage(Image originalImage);
+
     String getProcessorName();
 }
 

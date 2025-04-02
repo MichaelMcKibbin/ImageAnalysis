@@ -106,11 +106,7 @@ public class GrayscaleProcessor implements ImageProcessor {
         return processImage(originalImage, ProcessingParameters.getDefaultGrayscale());
     }
 
-    @Override
-    public Image processSecondaryImage(Image originalImage) {
-        // You might want to show histogram or another useful visualization
-        return processImage(originalImage); // Simple default implementation
-    }
+
 
     @Override
     public String getProcessorName() {

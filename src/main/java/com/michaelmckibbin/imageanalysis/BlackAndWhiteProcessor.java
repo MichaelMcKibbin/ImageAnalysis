@@ -50,11 +50,6 @@ public class BlackAndWhiteProcessor implements ImageProcessor {
         return processImage(originalImage, ProcessingParameters.getDefaultBlackAndWhite());
     }
 
-    @Override
-public Image processSecondaryImage(Image originalImage) {
-    // You might want to show edges or another useful visualization
-    return processImage(originalImage); // Simple default implementation
-}
 
 
     @Override

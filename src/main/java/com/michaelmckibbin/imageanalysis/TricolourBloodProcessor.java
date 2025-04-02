@@ -68,10 +68,10 @@ public class TricolourBloodProcessor implements ImageProcessor {
                     // Check if it's a WBC (darker purple in original)
                     if (color.getBrightness() < 0.5) {
                         // Deep purple for WBCs
-                        pixelWriter.setColor(x, y, Color.rgb(102, 0, 153));
+                        pixelWriter.setColor(x, y, Color.rgb(75, 0, 130));
                     } else {
                         // Pink/light purple for RBCs
-                        pixelWriter.setColor(x, y, Color.rgb(255, 153, 255));
+                        pixelWriter.setColor(x, y, Color.rgb(219, 112, 147));
                     }
                 } else {
                     // Background or plasma
@@ -83,36 +83,5 @@ public class TricolourBloodProcessor implements ImageProcessor {
         return processedImage;
     }
 
-    @Override
-    public Image processSecondaryImage(Image originalImage) {
-        int width = (int) originalImage.getWidth();
-        int height = (int) originalImage.getHeight();
 
-        WritableImage binaryImage = new WritableImage(width, height);
-        PixelReader pixelReader = originalImage.getPixelReader();
-        PixelWriter pixelWriter = binaryImage.getPixelWriter();
-
-        // Create binary version to show cell detection
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color color = pixelReader.getColor(x, y);
-                double purpleIntensity = (color.getRed() + color.getBlue()) / 2 - color.getGreen();
-
-                if (purpleIntensity > 0.2) {
-                    if (color.getBrightness() < 0.5) {
-                        // WBCs in red
-                        pixelWriter.setColor(x, y, Color.RED);
-                    } else {
-                        // RBCs in blue
-                        pixelWriter.setColor(x, y, Color.BLUE);
-                    }
-                } else {
-                    // Background in white
-                    pixelWriter.setColor(x, y, Color.WHITE);
-                }
-            }
-        }
-
-        return binaryImage;
-    }
 }
