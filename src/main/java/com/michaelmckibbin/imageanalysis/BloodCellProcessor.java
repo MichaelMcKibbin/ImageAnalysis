@@ -66,12 +66,15 @@ public class BloodCellProcessor implements ImageProcessor {
     public Image processImage(Image originalImage) {
         // Default parameters when no sliders are used
         ProcessingParameters defaultParams = new ProcessingParameters(
-                50.0,  // default white cell threshold
-                0.0,   // saturation (unused)
-                0.0,   // hue (unused)
-                60.0,  // default red cell threshold
-                0.0,   // green (unused)
-                10.0   // default cell size threshold (will give minCellSize of ~100)
+                0.0,    // brightness
+                0.0,     // saturation
+                0.0,     // hue
+                0.0,    // red
+                0.0,     // green
+                0.0,    // blue
+                50.0,    // redCellThreshold
+                50.0,    // whiteCellThreshold
+                50.0     // minCellSize - set to middle of range (0-100)
         );
         return processImage(originalImage, defaultParams);
     }

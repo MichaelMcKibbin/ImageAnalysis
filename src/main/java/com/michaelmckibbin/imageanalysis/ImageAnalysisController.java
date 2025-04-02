@@ -215,7 +215,10 @@ private void setupProcessors() {
 
 
     private ProcessingParameters createProcessingParameters() {
-        return new ProcessingParameters(
+        double cellSizeValue = sliderCellSizeThreshold.getValue();
+        System.out.println("Cell Size Threshold Slider Value: " + cellSizeValue);
+
+        ProcessingParameters params = new ProcessingParameters(
                 sliderBrightness.getValue() / 100.0,  // Convert to -1.0 to 1.0
                 0.0, // saturation
                 0.0, // hue
@@ -224,11 +227,11 @@ private void setupProcessors() {
                 sliderBlue.getValue() / 100.0,
                 sliderRedCellSensitivity.getValue(),
                 sliderWhiteCellSensitivity.getValue(),
-                sliderCellSizeThreshold.getValue()
-
-
+                cellSizeValue
         );
 
+        System.out.println("Created Parameters - Cell Size: " + params.getMinCellSize());
+        return params;
     }
 
 

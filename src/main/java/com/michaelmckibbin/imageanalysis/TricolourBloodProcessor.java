@@ -21,12 +21,15 @@ public class TricolourBloodProcessor implements ImageProcessor {
     @Override
     public Image processImage(Image originalImage) {
         ProcessingParameters defaultParams = new ProcessingParameters(
-            0.0,    // brightness
-            0.0,    // saturation
-            0.0,    // hue
-            1.0,    // red
-            1.0,    // green
-            1.0     // blue
+                0.0,    // brightness
+                0.0,     // saturation
+                0.0,     // hue
+                0.0,    // red
+                0.0,     // green
+                0.0,    // blue
+                50.0,    // redCellThreshold
+                50.0,    // whiteCellThreshold
+                50.0     // minCellSize - set to middle of range (0-100)
         );
 
         return processImage(originalImage, defaultParams);

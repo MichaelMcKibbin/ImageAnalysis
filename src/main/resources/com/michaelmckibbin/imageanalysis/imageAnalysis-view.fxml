@@ -68,7 +68,7 @@
             <Slider fx:id="sliderCellSizeThreshold"
                     min="0"
                     max="100"
-                    value="10"
+                    value="50"
                     blockIncrement="1"
             />
             <Label text="Cell Size Threshold" />
