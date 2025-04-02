@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.*;
-import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import java.awt.Point;
@@ -17,6 +16,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+
+import com.michaelmckibbin.imageanalysis.UnionFind;
+
+import java.util.LinkedList;
+//import com.michaelmckibbin.imageanalysis.LinkedList; // need to add Queue...
 
 
 public class UnionFindBloodCellProcessor implements ImageProcessor{
@@ -373,7 +377,7 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
 
     @Override
     public String getProcessorName() {
-        return "Blood Cell Analysis";
+        return "Union Find Blood Analysis";
     }
 
 }

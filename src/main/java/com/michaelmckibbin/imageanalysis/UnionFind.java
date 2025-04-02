@@ -2,7 +2,12 @@ package com.michaelmckibbin.imageanalysis;
 
 /**
  * Union-Find (Disjoint Set Union) implementation with
- * Path Compression and Union by Rank.
+ * Path Compression, Union by Rank, and Size Tracking.
+ * This class is used in the blood cell analysis to efficiently
+ * manage and merge disjoint sets of pixels.
+ *
+ * @see BloodCellProcessor
+ * @see UnionFindBloodCellProcessor
  */
 
 public class UnionFind {
@@ -19,18 +24,37 @@ public class UnionFind {
      * @param size The number of elements in the Union-Find structure.
      */
 
-    public UnionFind(int size) {
-        parent = new int[size];
-        rank = new int[size];
-        this.size = new int[size];  // Initialize size array
+//    public UnionFind(int size) {
+//        parent = new int[size];
+//        rank = new int[size];
+//        this.size = new int[size];  // Initialize size array
+//
+//        // Initialize each element to be its own parent (self-loop)
+//        for (int i = 0; i < size; i++) {
+//            parent[i] = i;
+//            rank[i] = 0; // Initially, all elements have rank 0
+//            this.size[i] = 1;  // Each set starts with size 1
+//        }
+//    }
 
-        // Initialize each element to be its own parent (self-loop)
-        for (int i = 0; i < size; i++) {
-            parent[i] = i;
-            rank[i] = 0; // Initially, all elements have rank 0
-            this.size[i] = 1;  // Each set starts with size 1
-        }
+    public UnionFind(int size) {
+    System.out.printf("Creating UnionFind: size=%d, called from %s%n",
+        size,
+        Thread.currentThread().getStackTrace()[2].getClassName()
+    );
+
+    parent = new int[size];
+    rank = new int[size];
+    this.size = new int[size];  // Initialize size array
+
+    // Initialize each element to be its own parent (self-loop)
+    for (int i = 0; i < size; i++) {
+        parent[i] = i;
+        rank[i] = 0; // Initially, all elements have rank 0
+        this.size[i] = 1;  // Each set starts with size 1
     }
+}
+
 
     /**
      * Finds the representative (root) of the set containing x.
