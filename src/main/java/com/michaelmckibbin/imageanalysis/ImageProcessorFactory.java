@@ -8,6 +8,7 @@ public class ImageProcessorFactory {
             case "sepia" -> new SepiaProcessor();
             case "objects" -> new BloodCellProcessor();
             case "tricolour" -> new TricolourBloodProcessor();
+            case "union" -> new UnionFindBloodCellProcessor();
             default -> throw new IllegalArgumentException("Unknown processor type");
         };
     }

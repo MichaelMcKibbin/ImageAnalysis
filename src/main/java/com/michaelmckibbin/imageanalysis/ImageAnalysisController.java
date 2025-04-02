@@ -25,7 +25,7 @@ public class ImageAnalysisController {
     @FXML public MenuItem loadImage;
     @FXML public MenuItem setDefaultImagesDir;
     @FXML public HBox imageChoicesBox;
-       @FXML private ImageView imageViewOriginal;
+    @FXML private ImageView imageViewOriginal;
     @FXML private ImageView imageViewProcessed;
     @FXML private ComboBox<ImageProcessor> processorComboBox;
 
@@ -60,11 +60,14 @@ private void setupProcessors() {
     imageProcessors = new ArrayList<>();
 
     // Add processors only once
+    imageProcessors.add(new OriginalImageProcessor());
     imageProcessors.add(new BlackAndWhiteProcessor());
     imageProcessors.add(new GrayscaleProcessor());
     imageProcessors.add(new SepiaProcessor());
     imageProcessors.add(new BloodCellProcessor());
     imageProcessors.add(new TricolourBloodProcessor());
+    imageProcessors.add(new UnionFindBloodCellProcessor());
+
     // Add other processors as needed
 
     // Add all processors to combo boxes at once

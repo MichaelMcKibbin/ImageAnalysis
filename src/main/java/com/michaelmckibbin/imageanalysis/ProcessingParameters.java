@@ -1,5 +1,30 @@
 package com.michaelmckibbin.imageanalysis;
 
+/**
+ * Encapsulates parameters for image processing and cell detection in blood cell analysis.
+ * This class holds values for both image adjustment and cell detection thresholds.
+ *
+ * Image adjustment parameters include:
+ * - brightness: Adjusts overall image brightness
+ * - saturation: Controls color saturation
+ * - hue: Adjusts color hue
+ * - red: Controls red channel intensity
+ * - green: Controls green channel intensity
+ * - blue: Controls blue channel intensity
+ *
+ * Cell detection parameters include:
+ * - redCellThreshold: Sensitivity for detecting red blood cells (0.0 to 1.0)
+ *   Lower values increase detection sensitivity but may increase false positives
+ * - whiteCellThreshold: Sensitivity for detecting white blood cells (0.0 to 1.0)
+ *   Middle values (0.5) provide balanced detection between sensitivity and accuracy
+ * - minCellSize: Minimum pixel size for cell detection (1 to 1000)
+ *   Helps filter out noise and artifacts
+ *
+ * @see BloodCellProcessor
+ * @see ImageProcessor
+ */
+
+
 public class ProcessingParameters {
     private final double brightness;
     private final double saturation;
@@ -83,54 +108,54 @@ public class ProcessingParameters {
                 0.0,  // red
                 0.0,  // green
                 0.0,  // blue
-                0.2,  // redCellThreshold // 0.2 = More sensitive detection of red cells
+                0.1,  // redCellThreshold // 0.2 = More sensitive detection of red cells
                 0.5,  // whiteCellThreshold // 0.5 = Moderate sensitivity for white cells
                 10.0  // minCellSize
 
-/*
- * Reasoning behind red & white threshold levels.
- *
- * Red level
- * A lower value (like 0.2) means:
- * - More lenient detection of red/pink cells
- * - Will detect cells with less intense red coloring
- * - May result in more red cells being detected
- * - Could increase false positives
- * Higher values (like 0.5) would:
- * - Be more strict in red cell detection
- * - Only detect cells with stronger red coloring
- * - May miss some fainter red cells
- * - Reduces false positives
- *
- * 0.1 = Very sensitive - detects many red cells
- * 0.2 = Current setting - moderately sensitive
- * 0.3 = Less sensitive
- * 0.4 = Strict - only very clear red cells
- *
- *
- * White level
- * A middle value (like 0.5) means:
- * - Balanced detection of purple/white cells
- * - Detects cells with moderate purple intensity
- * - Provides good discrimination between white and red cells
- * Lower values would:
- * - Increase sensitivity to white cells
- * - Detect more faintly purple cells
- * - Risk detecting some red cells as white cells
- * Higher values would:
- * - Be more strict in white cell detection
- * - Only detect very distinctly purple cells
- * - Might miss some valid white cells
- *
- * 0.3 = Very sensitive - detects many white cells
- * 0.5 = Default setting - balanced detection
- * 0.6 = Moderate sensitivity - may detect some faint white cells
- * 0.7 = Less sensitive
- * 0.8 = Strict - only very clear white cells
- *
- *
- * Works with isCellOfType() method where color analysis is performed.
- */
+        /*
+        * Reasoning behind red & white threshold levels.
+        *
+        * Red level
+        * A lower value (like 0.2) means:
+        * - More lenient detection of red/pink cells
+        * - Will detect cells with less intense red coloring
+        * - May result in more red cells being detected
+        * - Could increase false positives
+        * Higher values (like 0.5) would:
+        * - Be more strict in red cell detection
+        * - Only detect cells with stronger red coloring
+        * - May miss some fainter red cells
+        * - Reduces false positives
+        *
+        * 0.1 = Very sensitive - detects many red cells
+        * 0.2 = Current setting - moderately sensitive
+        * 0.3 = Less sensitive
+        * 0.4 = Strict - only very clear red cells
+        *
+        *
+        * White level
+        * A middle value (like 0.5) means:
+        * - Balanced detection of purple/white cells
+        * - Detects cells with moderate purple intensity
+        * - Provides good discrimination between white and red cells
+        * Lower values would:
+        * - Increase sensitivity to white cells
+        * - Detect more faintly purple cells
+        * - Risk detecting some red cells as white cells
+        * Higher values would:
+        * - Be more strict in white cell detection
+        * - Only detect very distinctly purple cells
+        * - Might miss some valid white cells
+        *
+        * 0.3 = Very sensitive - detects many white cells
+        * 0.5 = Default setting - balanced detection
+        * 0.6 = Moderate sensitivity - may detect some faint white cells
+        * 0.7 = Less sensitive
+        * 0.8 = Strict - only very clear white cells
+        *
+        *
+        * Works with isCellOfType() method where color analysis is performed.
+        */
 
 
         );

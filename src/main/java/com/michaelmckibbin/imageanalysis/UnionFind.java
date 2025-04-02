@@ -8,6 +8,8 @@ package com.michaelmckibbin.imageanalysis;
 public class UnionFind {
     private int[] parent; // Stores the parent of each element
     private int[] rank;   // Stores the rank of each set (tree depth)
+    private int[] size;  // useful for cell detection to filter by cell size
+    private int count;
 
     /**
      * Constructor to initialize Union-Find data structure.
@@ -20,11 +22,13 @@ public class UnionFind {
     public UnionFind(int size) {
         parent = new int[size];
         rank = new int[size];
+        this.size = new int[size];  // Initialize size array
 
         // Initialize each element to be its own parent (self-loop)
         for (int i = 0; i < size; i++) {
             parent[i] = i;
             rank[i] = 0; // Initially, all elements have rank 0
+            this.size[i] = 1;  // Each set starts with size 1
         }
     }
 
@@ -64,11 +68,14 @@ public class UnionFind {
             // Attach the smaller tree to the larger tree
             if (rank[rootX] > rank[rootY]) {
                 parent[rootY] = rootX; // rootX becomes the root
+                size[rootX] += size[rootY];  // Update size
             } else if (rank[rootX] < rank[rootY]) {
                 parent[rootX] = rootY; // rootY becomes the root
+                size[rootY] += size[rootX];  // Update size
             } else {
                 // If ranks are equal, arbitrarily choose one as root
                 parent[rootY] = rootX;
+                size[rootX] += size[rootY];  // Update size
                 rank[rootX]++; // Increase rank since tree height increases
             }
         }
@@ -101,5 +108,16 @@ public class UnionFind {
         }
         return count;
     }
+
+    /**
+     * Gets the size of the set containing element x.
+     *
+     * @param x The element whose set size to find
+     * @return The number of elements in the set containing x
+     */
+    public int getSize(int x) {
+        return size[find(x)];
+    }
+
 }
 
