@@ -179,6 +179,9 @@ public class ProcessingParameters {
         );
     }
 
+
+
+
     // Getters
     public double getMinCellSize() {
         return minCellSize;
