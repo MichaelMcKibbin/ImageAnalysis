@@ -6,9 +6,10 @@ public class ImageProcessorFactory {
             case "bw" -> new BlackAndWhiteProcessor();
             case "grayscale" -> new GrayscaleProcessor();
             case "sepia" -> new SepiaProcessor();
-            case "objects" -> new BloodCellProcessor();
+            //case "objects" -> new BloodCellProcessor();
             case "tricolour" -> new TricolourBloodProcessor();
             case "union" -> new UnionFindBloodCellProcessor();
+            case "union2" -> new UnionFindBlood2();  // Width and height will be set when processing
             default -> throw new IllegalArgumentException("Unknown processor type");
         };
     }

@@ -162,9 +162,9 @@ public class ProcessingParameters {
     }
 
     public static ProcessingParameters getDefaultTricolourBlood() {double  redCellThreshold = 0.2; // Example threshold, adjust as needed
-        double whiteCellThreshold = 0.5; // Example threshold, adjust as needed
-        double minCellSize = 10; // Example minimum cell size, adjust as needed
-        double maxCellSize = 100; // Example maximum cell size, adjust as needed
+        double whiteCellThreshold = 0.5; // adjust as needed
+        double minCellSize = 10; // adjust as needed
+        double maxCellSize = 100; // adjust as needed
 
         return new ProcessingParameters(
                 0.0,  // brightness
