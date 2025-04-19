@@ -12,7 +12,7 @@ public class ImageAnalysisApplication extends Application {
 @Override
 public void start(Stage stage) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(ImageAnalysisApplication.class.getResource("imageAnalysis-view.fxml"));
-    Scene scene = new Scene(fxmlLoader.load());  // Remove hardcoded dimensions
+    Scene scene = new Scene(fxmlLoader.load());
 
     // Add CSS to the scene
     String css = ImageAnalysisApplication.class.getResource("styles.css").toExternalForm();
@@ -20,7 +20,7 @@ public void start(Stage stage) throws IOException {
 
     stage.setTitle("Image Analysis");
     stage.setScene(scene);
-    stage.sizeToScene();  // Add this line to auto-size the stage
+    stage.sizeToScene();  // Auto-size the stage
 
     // Optional: Set minimum window size to prevent too small resizing
     stage.setMinWidth(800);  // Adjust these values as needed
