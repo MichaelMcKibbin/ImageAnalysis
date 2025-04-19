@@ -38,9 +38,7 @@ public class TricolourBloodProcessor implements ImageProcessor {
 
         // Apply brightness and color adjustments from parameters
         double brightness = params.getBrightness();
-        double red = params.getRed() == 0.0 ? 1.0 : params.getRed();
-        double green = params.getGreen() == 0.0 ? 1.0 : params.getGreen();
-        double blue = params.getBlue() == 0.0 ? 1.0 : params.getBlue();
+
 
         // First pass: Initial cell detection
         for (int y = 0; y < height; y++) {

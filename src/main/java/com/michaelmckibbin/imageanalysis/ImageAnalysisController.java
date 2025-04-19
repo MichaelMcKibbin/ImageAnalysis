@@ -70,8 +70,6 @@ public class ImageAnalysisController {
         imageProcessors = Arrays.asList(
             new OriginalImageProcessor(),
             new BlackAndWhiteProcessor(),
-            new GrayscaleProcessor(),
-            new SepiaProcessor(),
             new BloodCellProcessor(),
             //new TricolourBloodProcessor(),
             tricolourProcessor,
@@ -264,17 +262,6 @@ public class ImageAnalysisController {
                 sliderRed.setValue(50);
                 sliderGreen.setValue(50);
                 sliderBlue.setValue(50);
-            }
-            else if (currentProcessor instanceof GrayscaleProcessor) {
-                defaults = ProcessingParameters.getDefaultGrayscale();
-                // Hide or disable color-related sliders
-                sliderHue.setDisable(true);
-                sliderSaturation.setDisable(true);
-            }
-            else if (currentProcessor instanceof SepiaProcessor) {
-                defaults = ProcessingParameters.getDefaultSepia();
-                sliderHue.setDisable(false);
-                sliderSaturation.setDisable(false);
             }
             else if (currentProcessor instanceof BloodCellProcessor) {
                 defaults = ProcessingParameters.getDefaultBloodCellDetection();
