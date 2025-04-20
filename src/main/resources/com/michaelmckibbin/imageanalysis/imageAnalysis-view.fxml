@@ -13,7 +13,8 @@
     <HBox>
         <MenuBar HBox.hgrow="ALWAYS">
             <Menu mnemonicParsing="false" text="File">
-                <MenuItem fx:id="loadImage" mnemonicParsing="false" onAction="#loadImage" text="Load Image" />
+                <MenuItem fx:id="loadImage" mnemonicParsing="false" onAction="#handleOpenFile" text="Load Image" />
+               <MenuItem fx:id="saveImageAs" mnemonicParsing="false" onAction="#handleSaveImageAs" text="Save Image As" />
                <MenuItem fx:id="setDefaultImagesDir" mnemonicParsing="false" onAction="#setDefaultImagesDirectory" text="Set default images directory" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" text="placeholder" />
@@ -65,12 +66,7 @@
         </VBox>
 
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderCellSizeThreshold"
-                    min="0"
-                    max="100"
-                    value="50"
-                    blockIncrement="1"
-            />
+            <Slider fx:id="sliderCellSizeThreshold" blockIncrement="1" max="100" min="0" value="50" />
             <Label text="Cell Size Threshold" />
         </VBox>
     </HBox>

@@ -214,7 +214,7 @@ public class TricolourBloodProcessor implements ImageProcessor {
         return null;
     }
 
-    // Add these helper methods at the end of your class
+    // helper methods
     private boolean isCell(Color color) {
         return isPurple(color) || isRed(color);
     }

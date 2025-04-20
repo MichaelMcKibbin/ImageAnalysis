@@ -24,7 +24,7 @@ public void start(Stage stage) throws IOException {
 
     // Optional: Set minimum window size to prevent too small resizing
     stage.setMinWidth(800);  // Adjust these values as needed
-    stage.setMinHeight(600); // Adjust these values as needed
+    stage.setMinHeight(400); // Adjust these values as needed
 
     stage.show();
 }

@@ -1,15 +1,22 @@
 
 package com.michaelmckibbin.imageanalysis;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +24,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.util.StringConverter;
 
+import javax.imageio.ImageIO;
+
+
+
+/**
+ * Controller class for the Image Analysis application.
+ * Manages the user interface and processing operations for blood cell image analysis.
+ * Supports multiple image processing modes, adjustments, and cell detection parameters.
+ */
 public class ImageAnalysisController {
     @FXML public HBox slidersHbox1;
     @FXML public HBox slidersHbox2;
@@ -24,6 +40,7 @@ public class ImageAnalysisController {
     @FXML public MenuItem loadImage;
     @FXML public MenuItem setDefaultImagesDir;
     @FXML public HBox imageChoicesBox;
+    @FXML public MenuItem saveImageAs;
     @FXML private ImageView imageViewOriginal;
     @FXML private ImageView imageViewProcessed;
     @FXML private ComboBox<ImageProcessor> processorComboBox;
@@ -42,6 +59,11 @@ public class ImageAnalysisController {
     private List<ImageProcessor> imageProcessors;
     private File defaultImageDirectory;
     private TricolourBloodProcessor tricolourProcessor;
+    /**
+     * Stores reference to the currently loaded image file.
+     * Used for determining default save names and formats.
+     */
+    private File currentImageFile;
 
     @FXML
     private void initialize() {
@@ -181,6 +203,12 @@ public class ImageAnalysisController {
             System.out.println("Red Cell Sensitivity: " + sliderRedCellSensitivity.getValue());
             System.out.println("Cell Size Threshold: " + sliderCellSizeThreshold.getValue());
 
+            /**
+             * Creates processing parameters based on current slider values.
+             * Combines all adjustment parameters into a single ProcessingParameters object.
+             *
+             * @return ProcessingParameters object containing current adjustment values
+             */
             ProcessingParameters params = createProcessingParameters();
 
             // Handle async processors differently
@@ -316,33 +344,97 @@ public class ImageAnalysisController {
         }
     }
 
-    public void loadImage(ActionEvent actionEvent) {
-        FileChooser fileChooser = createConfiguredFileChooser();
-        File selectedFile = fileChooser.showOpenDialog(null);
-        loadSelectedFile(selectedFile);
-    }
+//    /**
+//     * Handles the opening of image files.
+//     * Displays a file chooser dialog and loads the selected image.
+//     * Supports common image formats (PNG, JPG, GIF).
+//     */
+//    public void handleOpenFile(ActionEvent actionEvent) {
+//        FileChooser fileChooser = createConfiguredFileChooser();
+//        File selectedFile = fileChooser.showOpenDialog(null);
+//        loadSelectedFile(selectedFile);
+//    }
+//
+//    private FileChooser createConfiguredFileChooser() {
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.setTitle("Select Image File");
+//        fileChooser.setInitialDirectory(defaultImageDirectory);
+//
+//        // Add support for multiple image formats
+//        fileChooser.getExtensionFilters().addAll(
+//                new FileChooser.ExtensionFilter("PNG Files", "*.png"),
+//                new FileChooser.ExtensionFilter("JPEG Files", "*.jpg", "*.jpeg"),
+//                new FileChooser.ExtensionFilter("GIF Files", "*.gif"),
+//                new FileChooser.ExtensionFilter("BMP Files", "*.bmp"),
+//                new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+//        );
+//        return fileChooser;
+//    }
+//
+//
+//    private void loadSelectedFile(File selectedFile) {
+//        if (selectedFile != null) {
+//            try {
+//                String imageUrl = selectedFile.toURI().toURL().toExternalForm();
+//                imageViewOriginal.setImage(new Image(imageUrl));
+//            } catch (MalformedURLException e) {
+//                showErrorAlert("Image Loading Error", "Could not load the selected image.");
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-    private FileChooser createConfiguredFileChooser() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Image File");
-        fileChooser.setInitialDirectory(defaultImageDirectory);
-        fileChooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
-        );
-        return fileChooser;
-    }
+    /**
+ * Handles the opening of image files.
+ * Displays a file chooser dialog with "All Images" as the default filter option.
+ *
+ * @param event The action event triggered by the open file button
+ */
+@FXML
+private void handleOpenFile(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Open Image File");
+    fileChooser.setInitialDirectory(defaultImageDirectory);
 
-    private void loadSelectedFile(File selectedFile) {
-        if (selectedFile != null) {
-            try {
-                String imageUrl = selectedFile.toURI().toURL().toExternalForm();
-                imageViewOriginal.setImage(new Image(imageUrl));
-            } catch (MalformedURLException e) {
-                showErrorAlert("Image Loading Error", "Could not load the selected image.");
-                e.printStackTrace();
-            }
+    // Create extension filters
+    FileChooser.ExtensionFilter allImagesFilter =
+        new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp");
+    FileChooser.ExtensionFilter pngFilter =
+        new FileChooser.ExtensionFilter("PNG Files", "*.png");
+    FileChooser.ExtensionFilter jpegFilter =
+        new FileChooser.ExtensionFilter("JPEG Files", "*.jpg", "*.jpeg");
+    FileChooser.ExtensionFilter gifFilter =
+        new FileChooser.ExtensionFilter("GIF Files", "*.gif");
+    FileChooser.ExtensionFilter bmpFilter =
+        new FileChooser.ExtensionFilter("BMP Files", "*.bmp");
+
+    // Add filters in desired order, with "All Images" first
+    fileChooser.getExtensionFilters().addAll(
+        allImagesFilter,
+        pngFilter,
+        jpegFilter,
+        gifFilter,
+        bmpFilter
+    );
+
+    // Set "All Images" as the default filter
+    fileChooser.setSelectedExtensionFilter(allImagesFilter);
+
+    File selectedFile = fileChooser.showOpenDialog(null);
+    if (selectedFile != null) {
+        try {
+            currentImageFile = selectedFile;
+            String imageUrl = selectedFile.toURI().toURL().toExternalForm();
+            imageViewOriginal.setImage(new Image(imageUrl));
+            updateImage();
+        } catch (MalformedURLException e) {
+            showErrorAlert("Image Loading Error", "Could not load the selected image.");
+            e.printStackTrace();
         }
     }
+}
+
+
 
     private void showErrorAlert(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -351,6 +443,83 @@ public class ImageAnalysisController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+/**
+ * Saves the processed image with a filename based on the original name plus timestamp.
+ * Maintains the original file format while allowing user to choose a different format.
+ *
+ * @param event The action event triggered by the save button
+ */
+@FXML
+private void handleSaveImageAs(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Save Image File");
+    fileChooser.setInitialDirectory(defaultImageDirectory);
+
+    // Add support for multiple image formats
+    fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("PNG Files", "*.png"),
+            new FileChooser.ExtensionFilter("JPEG Files", "*.jpg", "*.jpeg"),
+            new FileChooser.ExtensionFilter("GIF Files", "*.gif"),
+            new FileChooser.ExtensionFilter("BMP Files", "*.bmp"),
+            new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+    );
+
+    // Generate timestamp for filename
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+    String timestamp = LocalDateTime.now().format(formatter);
+
+    // Set default filename and format based on original image
+    if (currentImageFile != null) {
+        String originalFileName = currentImageFile.getName();
+        String originalExtension = originalFileName.substring(originalFileName.lastIndexOf('.') + 1).toLowerCase();
+        String baseFileName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+        String defaultFileName = String.format("%s_processed_%s.%s", baseFileName, timestamp, originalExtension);
+        fileChooser.setInitialFileName(defaultFileName);
+
+        // Set the extension filter to match the original image format
+        for (FileChooser.ExtensionFilter filter : fileChooser.getExtensionFilters()) {
+            if (filter.getExtensions().contains("*." + originalExtension)) {
+                fileChooser.setSelectedExtensionFilter(filter);
+                break;
+            }
+        }
+    } else {
+        fileChooser.setInitialFileName("processed_image_" + timestamp + ".png");
+        fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0)); // PNG default
+    }
+
+    File selectedFile = fileChooser.showSaveDialog(null);
+    if (selectedFile != null) {
+        try {
+            Image imageToSave = imageViewProcessed.getImage();
+            BufferedImage bImage = SwingFXUtils.fromFXImage(imageToSave, null);
+
+            // Determine format from the selected file extension
+            String format = selectedFile.getName().substring(selectedFile.getName().lastIndexOf('.') + 1).toLowerCase();
+
+            // Handle JPEG format specifically to avoid alpha channel issues
+            if (format.equals("jpg") || format.equals("jpeg")) {
+                // Convert to RGB if image has alpha channel
+                BufferedImage rgbImage = new BufferedImage(bImage.getWidth(), bImage.getHeight(),
+                        BufferedImage.TYPE_INT_RGB);
+                Graphics2D graphics = rgbImage.createGraphics();
+                graphics.drawImage(bImage, 0, 0, null);
+                graphics.dispose();
+                bImage = rgbImage;
+            }
+
+            ImageIO.write(bImage, format, selectedFile);
+        } catch (IOException e) {
+            showErrorAlert("Save Error", "Could not save the image.");
+            e.printStackTrace();
+        }
+    } else {
+        showErrorAlert("Save Error", "No file selected.");
+    }
+}
+
+
 
     public void setDefaultImagesDirectory(ActionEvent actionEvent) {
     }
@@ -369,6 +538,8 @@ public class ImageAnalysisController {
             updateImage();
         }
     }
+
+
 }
 
 
