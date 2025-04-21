@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import com.michaelmckibbin.imageanalysis.UnionFind;
 
+
+//before changes
 // Method to process the image with tricolour blood effect
 // Assumptions: Original image uses Romanowsky staining. The Nucleus of White Blood Cells are typically a darker purple than Red Blood Cells which are typically a pale pink.
 // After processing, the White blood cell nucleus should be coloured purple. The red blood cells should be coloured red and the background should be white.
