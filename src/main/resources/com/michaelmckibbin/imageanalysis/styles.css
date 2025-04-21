@@ -46,7 +46,7 @@
 }
 
 VBox {
-    -fx-background-color: rgba(165, 5, 25, 0.5);
+    -fx-background-color: rgba(165, 5, 25, 0.1);
     -fx-border-radius: 3;
     -fx-border-width: 2;
     -fx-padding: 10;
@@ -55,7 +55,7 @@ VBox {
 }
 
 HBox {
-    -fx-background-color: rgba(140, 150, 200, 0.75);
+    -fx-background-color: rgba(191, 199, 236, 0.87);
     -fx-border-radius: 3;
     -fx-border-width: 2;
     -fx-padding: 10;
