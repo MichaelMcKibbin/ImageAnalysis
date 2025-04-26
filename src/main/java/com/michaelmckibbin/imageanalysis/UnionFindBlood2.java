@@ -24,6 +24,10 @@ public class UnionFindBlood2 implements ImageProcessor {
 
     @Override
     public Image processImage(Image image, ProcessingParameters params) {
+        System.out.println("\n*****************************************************");
+        System.out.println("\n*       Processing image with UnionFindBlood2       *");
+        System.out.println("\n*****************************************************");
+        System.out.println("\n");
         this.width = (int) image.getWidth();
         this.height = (int) image.getHeight();
         this.labels = new int[height][width];

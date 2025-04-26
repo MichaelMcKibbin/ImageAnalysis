@@ -23,6 +23,11 @@ public class OriginalImageProcessor implements ImageProcessor {
      */
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
+        System.out.println("\n*****************************************************");
+        System.out.println("\n*   Processing image with OriginalImageProcessor    *");
+        System.out.println("\n*****************************************************");
+        System.out.println("\n");
+
         int width = (int) originalImage.getWidth();
         int height = (int) originalImage.getHeight();
 

@@ -11,6 +11,10 @@ public class BlackAndWhiteProcessor implements ImageProcessor {
 
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
+        System.out.println("\n*****************************************************");
+        System.out.println("\n*   Processing image with BlackAndWhiteProcessor    *");
+        System.out.println("\n*****************************************************");
+        System.out.println("\n");
         int width = (int) originalImage.getWidth();
         int height = (int) originalImage.getHeight();
 

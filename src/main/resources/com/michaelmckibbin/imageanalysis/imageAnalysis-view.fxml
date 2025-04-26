@@ -56,50 +56,50 @@
 
     <HBox fx:id="slidersHbox3" alignment="CENTER" spacing="20" styleClass="slidersHbox">
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderRedCellSensitivity" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Slider fx:id="sliderRedCellSensitivity" minorTickCount="4" showTickMarks="true" />
             <Label text="Red Cell Sensitivity" />
         </VBox>
 
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderWhiteCellSensitivity" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Slider fx:id="sliderWhiteCellSensitivity" minorTickCount="4" showTickMarks="true" />
             <Label text="White Cell Sensitivity" />
         </VBox>
 
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderCellSizeThreshold" blockIncrement="1" max="100" min="0" value="50" />
+            <Slider fx:id="sliderCellSizeThreshold" blockIncrement="1" max="100" min="0" showTickMarks="true" value="50" />
             <Label text="Cell Size Threshold" />
         </VBox>
     </HBox>
 
-<HBox fx:id="slidersHbox2" alignment="CENTER" spacing="20" styleClass="slidersHbox" visible="false">
+<HBox fx:id="slidersHbox2" alignment="CENTER" spacing="20" styleClass="slidersHbox" visible="true">
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <Slider fx:id="sliderSaturation" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
-        <Label text="Saturation" />
+        <Slider fx:id="sliderMinCellSize" minorTickCount="4" showTickMarks="true" />
+        <Label text="Minimum Cell Size" />
     </VBox>
 
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <Slider fx:id="sliderBrightness" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <Slider fx:id="sliderBrightness" minorTickCount="4" showTickMarks="true" />
         <Label text="Brightness" />
     </VBox>
 
     <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-        <Slider fx:id="sliderHue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+        <Slider fx:id="sliderHue" minorTickCount="4" showTickMarks="true" />
         <Label text="Hue" />
     </VBox>
 </HBox>
-    <HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox" visible="false">
+    <HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox" visible="true">
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderRed" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Slider fx:id="sliderRed" minorTickCount="4" showTickMarks="true" />
             <Label text="Red" />
         </VBox>
 
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderGreen" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Slider fx:id="sliderGreen" minorTickCount="4" showTickMarks="true" />
             <Label text="Green" />
         </VBox>
 
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Slider fx:id="sliderBlue" minorTickCount="4" showTickLabels="true" showTickMarks="true" />
+            <Slider fx:id="sliderBlue" minorTickCount="4" showTickMarks="true" />
             <Label text="Blue" />
         </VBox>
     </HBox>

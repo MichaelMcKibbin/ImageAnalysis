@@ -48,7 +48,7 @@ public class ImageAnalysisController {
     // Sliders
     @FXML private Slider sliderBrightness;
     @FXML private Slider sliderHue;
-    @FXML private Slider sliderSaturation;
+    @FXML private Slider sliderMinCellSize;
     @FXML private Slider sliderRed;
     @FXML private Slider sliderGreen;
     @FXML private Slider sliderBlue;
@@ -174,7 +174,7 @@ public class ImageAnalysisController {
     private void setupSliderListeners() {
         // Create a list of all sliders
         List<Slider> sliders = Arrays.asList(
-            sliderBrightness, sliderHue, sliderSaturation,
+            sliderBrightness, sliderHue, sliderMinCellSize,
             sliderRed, sliderGreen, sliderBlue,
             sliderWhiteCellSensitivity, sliderRedCellSensitivity, sliderCellSizeThreshold
         );
@@ -214,7 +214,7 @@ public class ImageAnalysisController {
             // Handle async processors differently
             if (selectedProcessor instanceof UnionFindBlood2 ||
                 selectedProcessor instanceof TricolourBloodProcessor) {
-                // These processors will update the image view through their callbacks
+                // These processors update the image view through their callbacks
                 selectedProcessor.processImage(imageViewOriginal.getImage(), params);
             } else {
                 // Synchronous processors
@@ -243,7 +243,7 @@ public class ImageAnalysisController {
             // Handle async processors differently
             if (selectedProcessor instanceof UnionFindBlood2 ||
                 selectedProcessor instanceof TricolourBloodProcessor) {
-                // These processors will update the image view through their callbacks
+                // These processors update the image view through their callbacks
                 selectedProcessor.processImage(imageViewOriginal.getImage(), params);
             } else {
                 // Synchronous processors
@@ -280,7 +280,7 @@ public class ImageAnalysisController {
 
             // Reset all sliders to disabled state first
             sliderHue.setDisable(true);
-            sliderSaturation.setDisable(true);
+            sliderMinCellSize.setDisable(true);
             sliderWhiteCellSensitivity.setDisable(true);
             sliderRedCellSensitivity.setDisable(true);
             sliderCellSizeThreshold.setDisable(true);
@@ -294,7 +294,7 @@ public class ImageAnalysisController {
             else if (currentProcessor instanceof BloodCellProcessor) {
                 defaults = ProcessingParameters.getDefaultBloodCellDetection();
                 sliderHue.setDisable(false);
-                sliderSaturation.setDisable(false);
+                sliderMinCellSize.setDisable(false);
             }
             else if (currentProcessor instanceof UnionFindBlood2) {
                 // Enable blood cell detection sliders

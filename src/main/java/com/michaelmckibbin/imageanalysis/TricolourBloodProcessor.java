@@ -17,9 +17,14 @@ import com.michaelmckibbin.imageanalysis.UnionFind;
 
 
 //before changes
-// Method to process the image with tricolour blood effect
-// Assumptions: Original image uses Romanowsky staining. The Nucleus of White Blood Cells are typically a darker purple than Red Blood Cells which are typically a pale pink.
-// After processing, the White blood cell nucleus should be coloured purple. The red blood cells should be coloured red and the background should be white.
+
+// Method to process an image of stained blood cells with tricolour effect.
+// Assumptions: Original image uses Romanowsky staining.
+// The Nucleus of White Blood Cells are typically purple.
+// The Red Blood Cells are typically a pale pink.
+// After processing, the White blood cell nucleus should be coloured purple.
+// The red blood cells should be coloured red.
+// The background should be white.
 
 public class TricolourBloodProcessor implements ImageProcessor {
     @Override
@@ -29,6 +34,12 @@ public class TricolourBloodProcessor implements ImageProcessor {
 
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
+        System.out.println("\n*****************************************************");
+        System.out.println("\n*   Processing image with TricolourBloodProcessor   *");
+        System.out.println("\n*****************************************************");
+        System.out.println("\n");
+
+
         int width = (int) originalImage.getWidth();
         int height = (int) originalImage.getHeight();
 
@@ -47,7 +58,7 @@ public class TricolourBloodProcessor implements ImageProcessor {
             for (int x = 0; x < width; x++) {
                 Color color = pixelReader.getColor(x, y);
 
-                // Your existing detection logic
+                // detection logic
                 double purpleIntensity = (color.getRed() + color.getBlue()) / 2.0 - color.getGreen();
                 purpleIntensity += brightness;
 

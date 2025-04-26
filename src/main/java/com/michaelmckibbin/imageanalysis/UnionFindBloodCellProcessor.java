@@ -30,6 +30,7 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
     private int maxCellSize = 5000;     // Maximum size to prevent false positives
     //private static final int DEFAULT_MIN_CELL_SIZE = 500;  // Default minimum size
 
+
     private enum CellType {
         WHITE_CELL,  // Purple colored cells (typically darker)
         RED_CELL     // Dark pink colored cells
@@ -39,6 +40,10 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
     public Image processImage(Image originalImage, ProcessingParameters params) {
 
         // Debug all incoming parameter values
+        System.out.println("\n*****************************************************");
+        System.out.println("\n* Processing image with UnionFindBloodCellProcessor *");
+        System.out.println("\n*****************************************************");
+        System.out.println("\n");
         System.out.println("\nIncoming Parameter Values:");
         System.out.println("White Cell Threshold: " + params.getWhiteCellThreshold());
         System.out.println("Red Cell Threshold: " + params.getRedCellThreshold());

@@ -28,6 +28,10 @@ public class BloodCellProcessor implements ImageProcessor {
 
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
+        System.out.println("\n*****************************************************");
+        System.out.println("\n*     Processing image with BloodCellProcessor      *");
+        System.out.println("\n*****************************************************");
+        System.out.println("\n");
 
         // Debug all incoming parameter values
         System.out.println("\nIncoming Parameter Values:");

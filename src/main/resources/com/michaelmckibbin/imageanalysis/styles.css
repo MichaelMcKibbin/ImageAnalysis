@@ -197,3 +197,6 @@ HBox {
     -fx-font-weight: bold;
 }
 
+.slidersHbox {
+    -fx-background-color: rgb(255,62,62,0.5);
+}
