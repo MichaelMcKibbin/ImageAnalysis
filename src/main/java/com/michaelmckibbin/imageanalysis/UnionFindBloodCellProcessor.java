@@ -124,9 +124,9 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
                 0.0,    // red
                 0.0,     // green
                 0.0,    // blue
-                50.0,    // redCellThreshold
+                0.5,    // redCellThreshold
                 50.0,    // whiteCellThreshold
-                50.0     // minCellSize - set to middle of range (0-100)
+                5.0     // minCellSize - set to middle of range (0-100)
         );
         return processImage(originalImage, defaultParams);
     }
@@ -188,28 +188,137 @@ private Rectangle getBoundingRectangle(List<Point> points) {
      * @param type The type of cell to check for (WHITE_CELL or RED_CELL)
      * @return true if the color matches the specified cell type's characteristics
      */
-private boolean isCellOfType(Color color, CellType type) {
-    double brightness = (color.getRed() + color.getGreen() + color.getBlue()) / 3.0;
-    double redComponent = color.getRed();
-    double blueComponent = color.getBlue();
 
-    switch (type) {
-        case WHITE_CELL:
-            // White blood cells are typically darker (purple)
-            // Check if the pixel is dark enough and has more blue component
-            return brightness < whiteCellThreshold && blueComponent > redComponent;
 
-        case RED_CELL:
-            // Red blood cells are typically pink/red
-            // Check if the pixel has strong red component but isn't too bright
-            return redComponent > redCellThreshold &&
-                   redComponent > blueComponent &&
-                   brightness < 0.8;
+// copy of original - before trying HSV...
+//
+// private boolean isCellOfType(Color color, CellType type) {
+//    double brightness = (color.getRed() + color.getGreen() + color.getBlue()) / 3.0;
+//    double redComponent = color.getRed();
+//    double blueComponent = color.getBlue();
+//
+//    switch (type) {
+//        case WHITE_CELL:
+//            // White blood cells are typically darker (purple)
+//            // Check if the pixel is dark enough and has more blue component
+//            return brightness < whiteCellThreshold && blueComponent > redComponent;
+//
+//        case RED_CELL:
+//            // Red blood cells are typically pink/red
+//            // Check if the pixel has strong red component but isn't too bright
+//            return redComponent > redCellThreshold &&
+//                   redComponent > blueComponent &&
+//                   brightness < 0.8;
+//
+//        default:
+//            return false;
+//    }
+//}
 
-        default:
-            return false;
+    private boolean isCellOfType(Color color, CellType type) {
+        double brightness = (color.getRed() + color.getGreen() + color.getBlue()) / 3.0;
+        double redComponent = color.getRed();
+        double blueComponent = color.getBlue();
+
+        switch (type) {
+            case WHITE_CELL:
+                // White blood cells are typically darker (purple)
+                // Check if the pixel is dark enough and has more blue component
+                return brightness < whiteCellThreshold && blueComponent > redComponent;
+
+            case RED_CELL:
+                // Red blood cells are typically pink/red
+                // Check if the pixel has strong red component but isn't too bright
+                return redComponent > redCellThreshold &&
+                        redComponent > blueComponent &&
+                        brightness < 0.8;
+
+            default:
+                return false;
+        }
     }
-}
+
+//    // TRY HSV (Hue, Saturation, Value)
+//    private boolean isCellOfType(Color color, CellType type) {
+//        double brightness = (color.getRed() + color.getGreen() + color.getBlue()) / 3.0;
+//        double[] hsv = rgbToHsv(color.getRed(), color.getGreen(), color.getBlue());
+//        double hue = hsv[0];
+//        double saturation = hsv[1];
+//        double value = hsv[2];
+//        int whiteCellPixelCount=0;
+//        int redCellPixelCount=0;
+//
+//        double redComponent = color.getRed();
+//        double blueComponent = color.getBlue();
+//
+//        switch (type) {
+//            case WHITE_CELL:
+//                // White blood cells are typically darker (purple)
+//                // Check if the pixel is dark enough and has more blue component
+//            //    return brightness < whiteCellThreshold && blueComponent > redComponent;
+//            boolean isWhiteCell = brightness < whiteCellThreshold &&
+//                    color.getBlue() > color.getRed();
+//            if (isWhiteCell) {
+//                whiteCellPixelCount++;
+//            }
+//            return isWhiteCell;
+//
+//            case RED_CELL:
+//                boolean isRedCell =
+//                        // starting values
+//                        // ((hue >= 300 && hue <= 360) || (hue >= 0 && hue <= 30)) && // Red/Pink hue range
+//                        //                                saturation >= 0.15 &&  // Minimum saturation to avoid white
+//                        //                                saturation <= 0.85 &&  // Maximum saturation to include pink
+//                        //                                value >= 0.3 &&        // Not too dark
+//                        //                                value <= 0.95;         // Not too light
+//
+//                        ((hue >= 300 && hue <= 360) || (hue >= 0 && hue <= 30)) && // Red/Pink hue range
+//                                saturation >= 0.15 &&  // Minimum saturation to avoid white
+//                                saturation <= 0.85 &&  // Maximum saturation to include pink
+//                                value >= 0.3 &&        // Not too dark
+//                                value <= 0.95;         // Not too light
+//
+//                if (isRedCell) {
+//                    redCellPixelCount++;
+//                }
+//                return isRedCell;
+//
+//            default:
+//                return false;
+//        }
+//    }
+//
+//
+//    // Helper method to convert RGB to HSV
+//    private double[] rgbToHsv(double r, double g, double b) {
+//        r /= 255.0;
+//        g /= 255.0;
+//        b /= 255.0;
+//
+//        double max = Math.max(Math.max(r, g), b);
+//        double min = Math.min(Math.min(r, g), b);
+//        double delta = max - min;
+//
+//        double hue = 0;
+//        if (delta != 0) {
+//            if (max == r) {
+//                hue = 60 * (((g - b) / delta) % 6);
+//            } else if (max == g) {
+//                hue = 60 * ((b - r) / delta + 2);
+//            } else {
+//                hue = 60 * ((r - g) / delta + 4);
+//            }
+//        }
+//        if (hue < 0) hue += 360;
+//
+//        double saturation = (max == 0) ? 0 : delta / max;
+//        double value = max;
+//
+//        return new double[]{hue, saturation, value};
+//    }
+//
+// end of Try HSV
+//=======================
 
     /**
      * Detects cells of the specified type in the image using connected component analysis.

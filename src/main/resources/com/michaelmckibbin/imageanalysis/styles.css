@@ -1,92 +1,106 @@
+/* Base colors - using .root for JavaFX */
 .root {
-    -fx-background-color: rgba(227, 227, 245, 0.6);
+    /* Primary colors */
+    -fx-primary: #2C3E50;        /* Dark blue-gray for headers */
+    -fx-secondary: #3498DB;      /* Bright blue for accents */
+    -fx-background: #ECF0F1;     /* Light gray background */
+    -fx-success: #2ECC71;        /* Green for success/confirmation */
+    -fx-warning: #E74C3C;        /* Red for warnings/errors */
+    -fx-text: #2C3E50;          /* Dark text color */
+
+    /* Set the default background */
+    -fx-background-color: -fx-background;
 }
 
-
-.label {
-    -fx-background-color: rgba(245, 245, 245, 0.25);
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-.menu-bar {
-    -fx-background-color: rgba(206, 175, 175, 0.25);
-    -fx-border-color: rgba(6, 70, 238, 0.6);
-    -fx-border-radius: 3;
-}
-
-.menu-item {
-    -fx-background-color: rgb(206, 175, 175, 0.45);
-    -fx-border-color: rgba(6, 70, 238, 0.6);
-    -fx-border-radius: 3;
-}
-
-.menu-item:hover {
-    -fx-background-color: skyblue;
-}
-
-.menu {
-    -fx-background-color: rgba(206, 175, 175, 0.70);
-}
-
-.button {
-    -fx-background-color: #f0f0f0;
-    -fx-border-color: #cccccc;
-    -fx-border-radius: 5px;
-    -fx-padding: 5px 10px;
-    -fx-text-fill: #484848;
-}
-
-.button:hover {
-    -fx-background-color: #fcd1d1;
-}
-
-.button:pressed {
-    -fx-background-color: #d0d0d0;
-}
-
-VBox {
-    -fx-background-color: rgba(165, 5, 25, 0.1);
-    -fx-border-radius: 3;
-    -fx-border-width: 2;
-    -fx-padding: 10;
-    -fx-spacing: 10;
-
-}
-
+/* HBox styling */
 HBox {
-    -fx-background-color: rgba(191, 199, 236, 0.87);
-    -fx-border-radius: 3;
-    -fx-border-width: 2;
+    -fx-background-color: derive(-fx-secondary, 90%);
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-border-color: -fx-secondary;
     -fx-padding: 10;
     -fx-spacing: 10;
 }
 
 /* Dialog styling */
 .dialog-pane {
-    -fx-background-color: rgba(200, 200, 240, 0.4);
-    -fx-border-color: blue;
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-secondary;
     -fx-border-width: 2;
     -fx-border-radius: 5;
 }
 
 .dialog-pane .header-panel {
-    -fx-background-color: rgba(200, 175, 175, 0.25);
-    -fx-border-color: blue;
-    -fx-border-width: 0 0 2 0;
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: #cc2323;
 }
 
 /* Text field styling */
 .text-field {
     -fx-background-color: white;
-    -fx-border-color: #cccccc;
+    -fx-border-color: derive(-fx-primary, 70%);
     -fx-border-radius: 3;
     -fx-padding: 5;
 }
 
 .text-field:focused {
-    -fx-border-color: #4CAF50;
+    -fx-border-color: -fx-secondary;
     -fx-border-width: 2;
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.7;
+    -fx-background-color: derive(-fx-background, 5%);
+}
+
+/* Button styling */
+.button {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: white;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 8 15 8 15;
+}
+
+.button:hover {
+    -fx-background-color: derive(-fx-secondary, -20%);
+}
+
+.button:pressed {
+    -fx-background-color: derive(-fx-secondary, -30%);
+}
+
+/* Slider styling */
+.slider {
+    -fx-pref-width: 200px;
+}
+
+.slider .track {
+    -fx-background-color: derive(-fx-primary, 70%);
+}
+
+.slider .thumb {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Radio button styling */
+.radio-button {
+    -fx-padding: 5;
+    -fx-text-fill: -fx-text;
+}
+
+.radio-button:selected {
+    -fx-font-weight: bold;
+}
+
+.radio-button .radio {
+    -fx-background-color: white;
+    -fx-border-color: derive(-fx-primary, 70%);
+    -fx-border-radius: 100;
+}
+
+.radio-button:selected .radio .dot {
+    -fx-background-color: -fx-secondary;
 }
 
 /* Table view styling */
@@ -94,109 +108,108 @@ HBox {
     -fx-background-color: transparent;
 }
 
-/* Scroll bar styling */
-.scroll-bar {
-    -fx-background-color: rgba(200, 200, 240, 0.4);
+.table-view .column-header {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-padding: 8;
 }
 
-.scroll-bar .thumb {
-    -fx-background-color: rgba(113, 192, 102, 0.7);
-    -fx-background-radius: 5;
+.table-row-cell:odd {
+    -fx-background-color: derive(-fx-secondary, 90%);
 }
 
-.scroll-bar .thumb:hover {
-    -fx-background-color: rgba(250, 186, 117, 0.9);
+.table-row-cell:even {
+    -fx-background-color: white;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: derive(-fx-secondary, 70%);
+}
+
+/* Menu styling */
+.menu-bar {
+    -fx-background-color: -fx-primary;
+}
+
+.menu {
+    -fx-background-color: transparent;
+}
+
+.menu .label {
+    -fx-text-fill: -fx-text;
+}
+
+.menu-item {
+    -fx-background-color: white;
+}
+
+.menu-item .label {
+    -fx-text-fill: -fx-text;
+}
+
+.menu-item:hover {
+    -fx-background-color: -fx-secondary;
+}
+
+.menu-item:hover .label {
+    -fx-text-fill: white;
 }
 
 /* Tooltip styling */
 .tooltip {
-    -fx-background-color: rgba(200, 200, 240, 0.9);
-    -fx-text-fill: black;
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
     -fx-font-size: 12px;
     -fx-padding: 5;
-    -fx-border-color: blue;
     -fx-border-radius: 3;
 }
 
-/* ComboBox styling */
-.combo-box {
-    -fx-background-color: white;
-    -fx-border-color: #cccccc;
-    -fx-border-radius: 3;
+/* ScrollBar styling */
+.scroll-bar {
+    -fx-background-color: -fx-background;
 }
 
-.combo-box:hover {
-    -fx-border-color: #4CAF50;
+.scroll-bar .thumb {
+    -fx-background-color: -fx-secondary;
+    -fx-background-radius: 5;
 }
 
-.combo-box .list-cell {
-    -fx-padding: 3 5 3 5;
+.scroll-bar .thumb:hover {
+    -fx-background-color: derive(-fx-secondary, -20%);
 }
 
-/* CheckBox styling */
-.check-box {
-    -fx-text-fill: #484848;
+/* Success and warning styles */
+.success-text {
+    -fx-text-fill: -fx-success;
 }
 
-.check-box .box {
-    -fx-background-color: white;
-    -fx-border-color: #cccccc;
-    -fx-border-radius: 3;
+.warning-text {
+    -fx-text-fill: -fx-warning;
 }
 
-.check-box:selected .mark {
-    -fx-background-color: #4CAF50;
+/* Label styling */
+.label {
+    -fx-text-fill: -fx-text;
 }
 
-/* Split pane styling */
-.split-pane {
-    -fx-background-color: transparent;
-}
-
-.split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: blue;
-    -fx-padding: 0 0.5 0 0.5;
-}
-
-.split-pane:vertical > .split-pane-divider {
-    -fx-background-color: blue;
-    -fx-padding: 0.5 0 0.5 0;
-}
-
-/* Error styling for input validation */
-.text-field.error {
-    -fx-border-color: #FF0000;
-    -fx-border-width: 2;
-}
-
-.error-label {
-    -fx-text-fill: #FF0000;
-    -fx-font-size: 12px;
-    -fx-padding: 2 0 0 0;
-}
-
-/* Disabled state styling */
-.button:disabled {
-    -fx-opacity: 0.5;
-}
-
-.text-field:disabled {
-    -fx-opacity: 0.5;
-    -fx-background-color: #f0f0f0;
-}
-
-.slider {
-    -fx-pref-width: 200px;  /* Set a preferred width for each slider */
-}
-
-.radio-button {
-    -fx-padding: 5px;
-}
-
-.radio-button:selected {
+/* Header label styling */
+.header-label {
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary;
 }
 
-.slidersHbox {
-    -fx-background-color: rgb(255,62,62,0.5);
+/* Status bar styling */
+.status-bar {
+    -fx-background-color: derive(-fx-primary, 90%);
+    -fx-padding: 5;
+}
+
+/* Progress bar styling */
+.progress-bar {
+    -fx-accent: -fx-secondary;
+}
+
+.progress-bar .track {
+    -fx-background-color: derive(-fx-background, -5%);
 }

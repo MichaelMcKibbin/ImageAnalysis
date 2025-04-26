@@ -184,7 +184,7 @@ public class ProcessingParameters {
                 0.0,  // red
                 0.0,  // green
                 0.0,  // blue
-                0.2,  // redCellThreshold
+                5.0,  // redCellThreshold
                 0.5,  // whiteCellThreshold
                 10.0  // minCellSize
         );
