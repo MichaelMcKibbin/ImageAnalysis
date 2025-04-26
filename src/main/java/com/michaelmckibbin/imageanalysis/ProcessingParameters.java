@@ -24,6 +24,50 @@ package com.michaelmckibbin.imageanalysis;
  * @see ImageProcessor
  */
 
+/**
+ * Reasoning behind red & white threshold levels.
+ *
+ * Red level
+ * A lower value (like 0.2) means:
+ * - More lenient detection of red/pink cells
+ * - Will detect cells with less intense red coloring
+ * - May result in more red cells being detected
+ * - Could increase false positives
+ * Higher values (like 0.5) would:
+ * - Be more strict in red cell detection
+ * - Only detect cells with stronger red coloring
+ * - May miss some fainter red cells
+ * - Reduces false positives
+ *
+ * 0.1 = Very sensitive - detects many red cells
+ * 0.2 = Current setting - moderately sensitive
+ * 0.3 = Less sensitive
+ * 0.4 = Strict - only very clear red cells
+ *
+ *
+ * White level
+ * A middle value (like 0.5) means:
+ * - Balanced detection of purple/white cells
+ * - Detects cells with moderate purple intensity
+ * - Provides good discrimination between white and red cells
+ * Lower values would:
+ * - Increase sensitivity to white cells
+ * - Detect more faintly purple cells
+ * - Risk detecting some red cells as white cells
+ * Higher values would:
+ * - Be more strict in white cell detection
+ * - Only detect very distinctly purple cells
+ * - Might miss some valid white cells
+ *
+ * 0.3 = Very sensitive - detects many white cells
+ * 0.5 = Default setting - balanced detection
+ * 0.6 = Moderate sensitivity - may detect some faint white cells
+ * 0.7 = Less sensitive
+ * 0.8 = Strict - only very clear white cells
+ *
+ *
+ * Works with isCellOfType() method where color analysis is performed.
+ */
 
 public class ProcessingParameters {
     private final double brightness;
@@ -111,53 +155,6 @@ public class ProcessingParameters {
                 0.1,  // redCellThreshold // 0.2 = More sensitive detection of red cells
                 0.5,  // whiteCellThreshold // 0.5 = Moderate sensitivity for white cells
                 10.0  // minCellSize
-
-        /*
-        * Reasoning behind red & white threshold levels.
-        *
-        * Red level
-        * A lower value (like 0.2) means:
-        * - More lenient detection of red/pink cells
-        * - Will detect cells with less intense red coloring
-        * - May result in more red cells being detected
-        * - Could increase false positives
-        * Higher values (like 0.5) would:
-        * - Be more strict in red cell detection
-        * - Only detect cells with stronger red coloring
-        * - May miss some fainter red cells
-        * - Reduces false positives
-        *
-        * 0.1 = Very sensitive - detects many red cells
-        * 0.2 = Current setting - moderately sensitive
-        * 0.3 = Less sensitive
-        * 0.4 = Strict - only very clear red cells
-        *
-        *
-        * White level
-        * A middle value (like 0.5) means:
-        * - Balanced detection of purple/white cells
-        * - Detects cells with moderate purple intensity
-        * - Provides good discrimination between white and red cells
-        * Lower values would:
-        * - Increase sensitivity to white cells
-        * - Detect more faintly purple cells
-        * - Risk detecting some red cells as white cells
-        * Higher values would:
-        * - Be more strict in white cell detection
-        * - Only detect very distinctly purple cells
-        * - Might miss some valid white cells
-        *
-        * 0.3 = Very sensitive - detects many white cells
-        * 0.5 = Default setting - balanced detection
-        * 0.6 = Moderate sensitivity - may detect some faint white cells
-        * 0.7 = Less sensitive
-        * 0.8 = Strict - only very clear white cells
-        *
-        *
-        * Works with isCellOfType() method where color analysis is performed.
-        */
-
-
         );
     }
 
@@ -176,6 +173,20 @@ public class ProcessingParameters {
                 redCellThreshold,
                 whiteCellThreshold,
                 minCellSize
+        );
+    }
+
+    public static ProcessingParameters UnionFindBloodCellProcessor() {
+        return new ProcessingParameters(
+                0.0,  // brightness
+                0.0,  // saturation
+                0.0,  // hue
+                0.0,  // red
+                0.0,  // green
+                0.0,  // blue
+                0.2,  // redCellThreshold
+                0.5,  // whiteCellThreshold
+                10.0  // minCellSize
         );
     }
 

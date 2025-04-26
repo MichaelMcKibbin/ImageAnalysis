@@ -22,20 +22,51 @@ import com.michaelmckibbin.imageanalysis.UnionFind;
 import java.util.LinkedList;
 //import com.michaelmckibbin.imageanalysis.LinkedList; // need to add Queue...
 
+/**
+ * Processes blood cell images using a Union-Find algorithm to detect and classify blood cells.
+ * This processor identifies two types of blood cells:
+ * <ul>
+ *     <li>White blood cells (appearing as purple in stained samples)</li>
+ *     <li>Red blood cells (appearing as pink in stained samples)</li>
+ * </ul>
+ * The processor uses color thresholds and connected component (pixel grouping) analysis to identify cell clusters.
+ */
 
 public class UnionFindBloodCellProcessor implements ImageProcessor{
+
+    /** Threshold value for detecting white blood cells (purple/darker objects) */
     private double whiteCellThreshold;  // For purple/darker objects
+
+    /** Threshold value for detecting red blood cells (dark pink objects) */
     private double redCellThreshold;    // For dark pink objects
+
+    /** Minimum size (in pixels) for a valid cell cluster */
     private int minCellSize;           // Will be set from slider
+    //private static final int DEFAULT_MIN_CELL_SIZE = 500;  // Default minimum size - changed to variable
+
+    /** Maximum size (in pixels) for a valid cell cluster to prevent false positives */
     private int maxCellSize = 5000;     // Maximum size to prevent false positives
-    //private static final int DEFAULT_MIN_CELL_SIZE = 500;  // Default minimum size
 
 
+    /**
+     * Enumeration of cell types that can be detected by the processor.
+     */
     private enum CellType {
+        /** Represents white blood cells, typically appearing purple in stained samples */
         WHITE_CELL,  // Purple colored cells (typically darker)
+
+        /** Represents red blood cells, typically appearing pink in stained samples */
         RED_CELL     // Dark pink colored cells
     }
 
+
+    /**
+     * Processes an image to detect and mark blood cells using specified parameters.
+     *
+     * @param originalImage The source image to be processed
+     * @param params Processing parameters containing thresholds and other settings
+     * @return A new Image with detected cells marked: blue for white blood cells, green for red blood cells
+     */
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
 
@@ -67,8 +98,8 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
         List<Rectangle> redCells = detectCells(originalImage, UnionFindBloodCellProcessor.CellType.RED_CELL);
 
         System.out.println("\nDetection Results:");
-        System.out.println("White (Purple) cells detected: " + whiteCells.size());
-        System.out.println("Red (Dark Pink) cells detected: " + redCells.size());
+        System.out.println("White cells detected (Purple Dye): " + whiteCells.size());
+        System.out.println("Red cells detected: (Pink Dye) " + redCells.size());
 
         markCells(processedImage, whiteCells, Color.BLUE);
         markCells(processedImage, redCells, Color.GREEN);
@@ -76,6 +107,13 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
         return processedImage;
     }
 
+
+    /**
+     * Processes an image using default blood cell detection parameters.
+     *
+     * @param originalImage The source image to be processed
+     * @return A new Image with detected cells marked using default parameters
+     */
     @Override
     public Image processImage(Image originalImage) {
         // Default parameters when no sliders are used
@@ -92,28 +130,6 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
         );
         return processImage(originalImage, defaultParams);
     }
-
-//
-//    private boolean isCellOfType(Color pixelColor, UnionFindBloodCellProcessor.CellType type) {
-//        double red = pixelColor.getRed();
-//        double green = pixelColor.getGreen();
-//        double blue = pixelColor.getBlue();
-//
-//        if (type == UnionFindBloodCellProcessor.CellType.WHITE_CELL) {
-//            // Look for purple colors (high red and blue, lower green)
-//            return (red + blue) / 2 > green + whiteCellThreshold
-//                    && blue > green
-//                    && red > green;
-//        } else {
-//            // Look for dark pink colors (high red, medium-low blue and green)
-//            return red > (blue + green) / 2 + redCellThreshold
-//                    && red > 0.3  // Ensure some minimum redness
-//                    && green < 0.7 // Not too bright
-//                    && blue < 0.7; // Not too bright
-//        }
-//    }
-//
-//
 
 
 /**
@@ -163,13 +179,15 @@ private Rectangle getBoundingRectangle(List<Point> points) {
     return new Rectangle(minX, minY, width, height);
 }
 
-/**
- * Determines if a color matches the characteristics of the specified cell type.
- *
- * @param color The color to check
- * @param type The type of cell to match against
- * @return true if the color matches the cell type characteristics
- */
+    /**
+     * Determines if a color matches the characteristics of the specified cell type.
+     * For white blood cells, checks for darker purple coloring.
+     * For red blood cells, checks for pink/red coloring with specific brightness constraints.
+     *
+     * @param color The color to analyze
+     * @param type The type of cell to check for (WHITE_CELL or RED_CELL)
+     * @return true if the color matches the specified cell type's characteristics
+     */
 private boolean isCellOfType(Color color, CellType type) {
     double brightness = (color.getRed() + color.getGreen() + color.getBlue()) / 3.0;
     double redComponent = color.getRed();
@@ -193,7 +211,13 @@ private boolean isCellOfType(Color color, CellType type) {
     }
 }
 
-
+    /**
+     * Detects cells of the specified type in the image using connected component analysis.
+     *
+     * @param image The source image to analyze
+     * @param cellType The type of cells to detect (WHITE_CELL or RED_CELL)
+     * @return List of Rectangles representing the bounding boxes of detected cells
+     */
 private List<Rectangle> detectCells(Image image, CellType cellType) {
     int width = (int) image.getWidth();
     int height = (int) image.getHeight();
@@ -238,7 +262,16 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
             .collect(Collectors.toList());
 }
 
-
+    /**
+     * Performs a flood fill operation starting from a given point to identify a complete cell.
+     *
+     * @param startX The starting X coordinate
+     * @param startY The starting Y coordinate
+     * @param image The image being analyzed
+     * @param visited Array tracking visited pixels
+     * @param type The type of cell being detected
+     * @return Rectangle representing the bounding box of the detected cell
+     */
     private Rectangle floodFill(int startX, int startY, Image image, boolean[][] visited, UnionFindBloodCellProcessor.CellType type) {
         Queue<Point2D> queue = new LinkedList<>();
         queue.add(new Point2D(startX, startY));
@@ -379,10 +412,23 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
     }
 
 
-
+    /**
+     * Returns the name of this image processor.
+     *
+     * @return The processor name as a String
+     */
     @Override
     public String getProcessorName() {
         return "Union Find Blood Analysis";
     }
 
+    /**
+     * Returns a string representation of this processor.
+     *
+     * @return The processor name as a String
+     */
+    @Override
+    public String toString() {
+        return "UnionFind Blood Cell Processor";
+    }
 }

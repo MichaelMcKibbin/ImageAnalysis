@@ -87,7 +87,7 @@
         <Label text="Hue" />
     </VBox>
 </HBox>
-    <HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox" visible="true">
+    <HBox fx:id="slidersHbox1" alignment="CENTER" spacing="20" styleClass="slidersHbox" visible="false">
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
             <Slider fx:id="sliderRed" minorTickCount="4" showTickMarks="true" />
             <Label text="Red" />
