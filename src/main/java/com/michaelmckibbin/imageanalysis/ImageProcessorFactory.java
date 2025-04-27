@@ -12,7 +12,7 @@ public class ImageProcessorFactory {
             //case "objects" -> new BloodCellProcessor();
             case "tricolour" -> new TricolourBloodProcessor();
             case "union" -> new UnionFindBloodCellProcessor();
-            case "union2" -> new UnionFindBlood2();  // Width and height will be set when processing
+            case "union2" -> new ConnectedComponentsProcessor();  // Width and height will be set when processing
             default -> throw new IllegalArgumentException("Unknown processor type");
         };
     }

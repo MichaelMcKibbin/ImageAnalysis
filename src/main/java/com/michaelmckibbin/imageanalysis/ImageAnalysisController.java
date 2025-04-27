@@ -88,7 +88,7 @@ public class ImageAnalysisController {
         processorComboBox.setPromptText("Choose process");
 
         // Initialize processors that need callbacks
-        UnionFindBlood2 unionFindProcessor = new UnionFindBlood2();
+        ConnectedComponentsProcessor unionFindProcessor = new ConnectedComponentsProcessor();
         unionFindProcessor.setResultCallback(processedImage -> {
             imageViewProcessed.setImage(processedImage);
         });
@@ -107,7 +107,7 @@ public class ImageAnalysisController {
             tricolourProcessor,
             unionFindProcessor,
             new UnionFindBloodCellProcessor()
-            //new UnionFindBlood2()
+            //new ConnectedComponentsProcessor()
         );
 
         processorComboBox.getItems().addAll(imageProcessors);
@@ -226,7 +226,7 @@ public class ImageAnalysisController {
             ProcessingParameters params = createProcessingParameters();
 
             // Handle async processors differently
-            if (selectedProcessor instanceof UnionFindBlood2 ||
+            if (selectedProcessor instanceof ConnectedComponentsProcessor ||
                 selectedProcessor instanceof TricolourBloodProcessor) {
                 // These processors update the image view through their callbacks
                 selectedProcessor.processImage(imageViewOriginal.getImage(), params);
@@ -255,7 +255,7 @@ public class ImageAnalysisController {
             ProcessingParameters params = createProcessingParameters();
 
             // Handle async processors differently
-            if (selectedProcessor instanceof UnionFindBlood2 ||
+            if (selectedProcessor instanceof ConnectedComponentsProcessor ||
                 selectedProcessor instanceof TricolourBloodProcessor) {
                 // These processors update the image view through their callbacks
                 selectedProcessor.processImage(imageViewOriginal.getImage(), params);
@@ -310,7 +310,7 @@ public class ImageAnalysisController {
                 sliderHue.setDisable(false);
                 sliderMinCellSize.setDisable(false);
             }
-            else if (currentProcessor instanceof UnionFindBlood2) {
+            else if (currentProcessor instanceof ConnectedComponentsProcessor) {
                 // Enable blood cell detection sliders
                 sliderWhiteCellSensitivity.setDisable(false);
                 sliderRedCellSensitivity.setDisable(false);
@@ -352,7 +352,7 @@ public class ImageAnalysisController {
     private void processImage(ImageProcessor processor) {
         if (imageViewOriginal.getImage() != null) {
             ProcessingParameters params = createProcessingParameters();
-            if (processor instanceof UnionFindBlood2 ||
+            if (processor instanceof ConnectedComponentsProcessor ||
                 processor instanceof TricolourBloodProcessor) {
                 // Async processors handle their own image updates
                 processor.processImage(imageViewOriginal.getImage(), params);

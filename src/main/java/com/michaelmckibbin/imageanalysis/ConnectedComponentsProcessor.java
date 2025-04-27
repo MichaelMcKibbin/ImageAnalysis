@@ -6,7 +6,16 @@ import javafx.scene.paint.Color;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class UnionFindBlood2 implements ImageProcessor {
+/**
+ * An alternate method of blood cell detection using the Connected Components detection.
+ *
+ * The TricolourBloodProcessor is used to create a binary image, and then the ConnectedComponentsProcessor
+ * is used to detect the connected components in the binary image. The connected components are then
+ * used to detect the blood cells.
+ *
+ * TricolourBloodProcessor uses a UnionFind/disjoint sets approach.
+ */
+public class ConnectedComponentsProcessor implements ImageProcessor {
     private int width;
     private int height;
     private int[][] labels;
@@ -15,7 +24,7 @@ public class UnionFindBlood2 implements ImageProcessor {
 
     @Override
     public String getProcessorName() {
-        return "Union Find Blood Cells 2";
+        return "Connected Components Processor";
     }
 
     public void setResultCallback(Consumer<Image> callback) {
@@ -24,9 +33,9 @@ public class UnionFindBlood2 implements ImageProcessor {
 
     @Override
     public Image processImage(Image image, ProcessingParameters params) {
-        System.out.println("\n*****************************************************");
-        System.out.println("\n*       Processing image with UnionFindBlood2       *");
-        System.out.println("\n*****************************************************");
+        System.out.println("\n******************************************************");
+        System.out.println("\n* Processing image with ConnectedComponentsProcessor *");
+        System.out.println("\n******************************************************");
         System.out.println("\n");
         this.width = (int) image.getWidth();
         this.height = (int) image.getHeight();
@@ -190,6 +199,12 @@ public class UnionFindBlood2 implements ImageProcessor {
         System.out.println("Drew boundaries for " + validCells + " valid cells");
     }
 
+/**
+ * Determines if a pixel's color indicates the presence of a specific cell type.
+ * Uses different thresholds for white and red blood cells based on
+ * their staining characteristics.
+ *
+ */
     private boolean isCell(Color color) {
         return isPurple(color) || isRed(color);
     }

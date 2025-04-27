@@ -15,19 +15,38 @@ import java.util.Map;
 import java.util.function.Consumer;
 import com.michaelmckibbin.imageanalysis.UnionFind;
 
-
-// Method to process an image of stained blood cells with tricolour effect.
-// Assumptions: Original image uses Romanowsky staining.
-// The Nucleus of White Blood Cells are typically purple.
-// The Red Blood Cells are typically a pale pink.
-// After processing, the White blood cell nucleus should be coloured purple.
-// The red blood cells should be coloured red.
-// The background should be white.
+/**
+ * A blood cell processor that identifies and marks three distinct types of cells based on color.
+ * This processor extends BloodCellProcessor to analyze blood cell images using color thresholds
+ * to identify:
+ * <ul>
+ *     <li>White blood cells (appearing as purple/dark in stained samples)</li>
+ *     <li>Red blood cells (appearing as pink in stained samples)</li>
+ *     <li>Platelets (appearing as small, dark spots)</li>
+ * </ul>
+ * The processor uses color intensity thresholds to differentiate between cell types
+ * and marks them with different colors in the output image.
+ * Assumptions:
+ * Original image uses Romanowsky staining.
+ * The Nucleus of White Blood Cells are typically purple.
+ * The Red Blood Cells are typically a pale pink.
+ *
+ * After processing, the White blood cell nucleus should be coloured purple.
+ * The red blood cells should be coloured red.
+ * Platelets should be filtered out by size as much as possible.
+ * The background should be white.
+ */
 
 public class TricolourBloodProcessor implements ImageProcessor {
+
+    /**
+     * Returns the name of this processor implementation.
+     *
+     * @return The string "Tricolour Blood Analysis"
+     */
     @Override
     public String getProcessorName() {
-        return "Tricolour Blood Analysis *";
+        return "Tricolour Blood Analysis";
     }
 
     @Override
@@ -218,8 +237,12 @@ public class TricolourBloodProcessor implements ImageProcessor {
         System.out.println("Final counts - Purple: " + purpleCount + ", Red: " + redCount);
     }
 
-
-
+    /**
+     * Processes an image using default blood cell detection parameters.
+     *
+     * @param originalImage The source image to be processed
+     * @return A new Image with detected cells marked using default parameters
+     */
     @Override
     public Image processImage(Image originalImage) {
         return null;
