@@ -10,7 +10,9 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-// The interface defines the contract that all image processors must follow
+/** The interface defines the contract that all image processors must follow
+ *
+ */
 public interface ImageProcessor {
     Image processImage(Image originalImage, ProcessingParameters params);
     Image processImage(Image originalImage);

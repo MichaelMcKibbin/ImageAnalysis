@@ -16,8 +16,6 @@ import java.util.function.Consumer;
 import com.michaelmckibbin.imageanalysis.UnionFind;
 
 
-//before changes
-
 // Method to process an image of stained blood cells with tricolour effect.
 // Assumptions: Original image uses Romanowsky staining.
 // The Nucleus of White Blood Cells are typically purple.

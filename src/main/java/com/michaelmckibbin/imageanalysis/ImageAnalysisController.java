@@ -56,9 +56,19 @@ public class ImageAnalysisController {
     @FXML public Slider sliderWhiteCellSensitivity;
     @FXML public Slider sliderCellSizeThreshold;
 
+    /**
+     * List of available image processors that can be applied to the image.
+     */
     private List<ImageProcessor> imageProcessors;
+
+    /**
+     * Stores the directory where the application is running.
+     * Used for setting default save locations.
+     */
     private File defaultImageDirectory;
+
     private TricolourBloodProcessor tricolourProcessor;
+
     /**
      * Stores reference to the currently loaded image file.
      * Used for determining default save names and formats.
@@ -92,7 +102,7 @@ public class ImageAnalysisController {
         imageProcessors = Arrays.asList(
             new OriginalImageProcessor(),
             new BlackAndWhiteProcessor(),
-            new BloodCellProcessor(),
+            //new BloodCellProcessor(),
             //new TricolourBloodProcessor(),
             tricolourProcessor,
             unionFindProcessor,
@@ -189,6 +199,10 @@ public class ImageAnalysisController {
         });
     }
 
+    /**
+     * Updates the image view with a new image.
+     * Adjusts the view to fit the window while maintaining aspect ratio.
+     */
     private void updateImage() {
         ImageProcessor selectedProcessor = processorComboBox.getValue();
         if (selectedProcessor != null && imageViewOriginal.getImage() != null) {
@@ -329,6 +343,12 @@ public class ImageAnalysisController {
         }
     }
 
+    /**
+     * Processes the current image using the selected processor and parameters.
+     * Updates the UI with the processing result.
+     *
+     * @param processor The image processor to use
+     */
     private void processImage(ImageProcessor processor) {
         if (imageViewOriginal.getImage() != null) {
             ProcessingParameters params = createProcessingParameters();
@@ -344,47 +364,8 @@ public class ImageAnalysisController {
         }
     }
 
-//    /**
-//     * Handles the opening of image files.
-//     * Displays a file chooser dialog and loads the selected image.
-//     * Supports common image formats (PNG, JPG, GIF).
-//     */
-//    public void handleOpenFile(ActionEvent actionEvent) {
-//        FileChooser fileChooser = createConfiguredFileChooser();
-//        File selectedFile = fileChooser.showOpenDialog(null);
-//        loadSelectedFile(selectedFile);
-//    }
-//
-//    private FileChooser createConfiguredFileChooser() {
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Select Image File");
-//        fileChooser.setInitialDirectory(defaultImageDirectory);
-//
-//        // Add support for multiple image formats
-//        fileChooser.getExtensionFilters().addAll(
-//                new FileChooser.ExtensionFilter("PNG Files", "*.png"),
-//                new FileChooser.ExtensionFilter("JPEG Files", "*.jpg", "*.jpeg"),
-//                new FileChooser.ExtensionFilter("GIF Files", "*.gif"),
-//                new FileChooser.ExtensionFilter("BMP Files", "*.bmp"),
-//                new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
-//        );
-//        return fileChooser;
-//    }
-//
-//
-//    private void loadSelectedFile(File selectedFile) {
-//        if (selectedFile != null) {
-//            try {
-//                String imageUrl = selectedFile.toURI().toURL().toExternalForm();
-//                imageViewOriginal.setImage(new Image(imageUrl));
-//            } catch (MalformedURLException e) {
-//                showErrorAlert("Image Loading Error", "Could not load the selected image.");
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
-    /**
+ /**
  * Handles the opening of image files.
  * Displays a file chooser dialog with "All Images" as the default filter option.
  *
@@ -407,6 +388,11 @@ private void handleOpenFile(ActionEvent event) {
         new FileChooser.ExtensionFilter("GIF Files", "*.gif");
     FileChooser.ExtensionFilter bmpFilter =
         new FileChooser.ExtensionFilter("BMP Files", "*.bmp");
+    FileChooser.ExtensionFilter tiffFilter =
+        new FileChooser.ExtensionFilter("TIFF Files", "*.tiff", "*.tif");
+    FileChooser.ExtensionFilter webpFilter =
+        new FileChooser.ExtensionFilter("WEBP Files", "*.webp");
+
 
     // Add filters in desired order, with "All Images" first
     fileChooser.getExtensionFilters().addAll(
@@ -414,7 +400,9 @@ private void handleOpenFile(ActionEvent event) {
         pngFilter,
         jpegFilter,
         gifFilter,
-        bmpFilter
+        bmpFilter,
+        tiffFilter,
+        webpFilter
     );
 
     // Set "All Images" as the default filter
@@ -456,13 +444,20 @@ private void handleSaveImageAs(ActionEvent event) {
     fileChooser.setTitle("Save Image File");
     fileChooser.setInitialDirectory(defaultImageDirectory);
 
-    // Add support for multiple image formats
+
+    /**
+     * Configuration for the file chooser dialog.
+     * Add support for multiple common image formats.
+     */
     fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tif", "*.tiff", "*.webp"),
             new FileChooser.ExtensionFilter("PNG Files", "*.png"),
             new FileChooser.ExtensionFilter("JPEG Files", "*.jpg", "*.jpeg"),
             new FileChooser.ExtensionFilter("GIF Files", "*.gif"),
             new FileChooser.ExtensionFilter("BMP Files", "*.bmp"),
-            new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+            new FileChooser.ExtensionFilter("TIFF Files", "*.tiff", "*.tif"),
+            new FileChooser.ExtensionFilter("WEBP Files", "*.webp")
+            // Add more formats as needed
     );
 
     // Generate timestamp for filename

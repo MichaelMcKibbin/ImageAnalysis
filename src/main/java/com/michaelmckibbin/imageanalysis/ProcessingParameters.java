@@ -154,7 +154,7 @@ public class ProcessingParameters {
                 0.0,  // blue
                 0.1,  // redCellThreshold // 0.2 = More sensitive detection of red cells
                 0.5,  // whiteCellThreshold // 0.5 = Moderate sensitivity for white cells
-                10.0  // minCellSize
+                0.0  // minCellSize
         );
     }
 

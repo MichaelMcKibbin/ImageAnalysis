@@ -29,7 +29,7 @@ import java.util.LinkedList;
  *     <li>White blood cells (appearing as purple in stained samples)</li>
  *     <li>Red blood cells (appearing as pink in stained samples)</li>
  * </ul>
- * The processor uses color thresholds and connected component (pixel grouping) analysis to identify cell clusters.
+ * The processor uses colour thresholds and connected component (pixel grouping) analysis to identify cell clusters.
  */
 
 public class UnionFindBloodCellProcessor implements ImageProcessor{
@@ -53,10 +53,10 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
      */
     private enum CellType {
         /** Represents white blood cells, typically appearing purple in stained samples */
-        WHITE_CELL,  // Purple colored cells (typically darker)
+        WHITE_CELL,  // Purple coloured cells (typically darker)
 
         /** Represents red blood cells, typically appearing pink in stained samples */
-        RED_CELL     // Dark pink colored cells
+        RED_CELL     // pink coloured cells
     }
 
 
@@ -133,7 +133,7 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
 
 
 /**
- * Checks if a pixel belongs to the specified cell type based on its color.
+ * Checks if a pixel belongs to the specified cell type based on its colour.
  *
  * @param image The source image
  * @param x X coordinate of the pixel
@@ -146,7 +146,7 @@ private boolean isCellPixel(Image image, int x, int y, CellType type) {
         return false;
     }
 
-    Color color = image.getPixelReader().getColor(x, y);
+    Color color = image.getPixelReader().getColor(x, y); // US spelling to match Java spelling
     return isCellOfType(color, type);
 }
 
@@ -180,13 +180,13 @@ private Rectangle getBoundingRectangle(List<Point> points) {
 }
 
     /**
-     * Determines if a color matches the characteristics of the specified cell type.
-     * For white blood cells, checks for darker purple coloring.
-     * For red blood cells, checks for pink/red coloring with specific brightness constraints.
+     * Determines if a colour matches the characteristics of the specified cell type.
+     * For white blood cells, checks for darker purple colouring.
+     * For red blood cells, checks for pink/red colouring with specific brightness constraints.
      *
-     * @param color The color to analyze
+     * @param color The color (colour) to analyze // US spelling to match Java
      * @param type The type of cell to check for (WHITE_CELL or RED_CELL)
-     * @return true if the color matches the specified cell type's characteristics
+     * @return true if the colour matches the specified cell type's characteristics
      */
 
 

@@ -26,6 +26,15 @@ public class BloodCellProcessor implements ImageProcessor {
         RED_CELL     // Dark pink colored cells
     }
 
+    /**
+     * Processes an image using specified parameters.
+     * This method implements the main image processing logic
+     * for blood cell detection and marking.
+     *
+     * @param originalImage The source image to be processed
+     * @param params The parameters to use for processing
+     * @return A processed image with detected cells marked
+     */
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
         System.out.println("\n*****************************************************");
@@ -66,6 +75,14 @@ public class BloodCellProcessor implements ImageProcessor {
         return processedImage;
     }
 
+    /**
+     * Processes an image using default parameters.
+     * This method provides a simplified interface for processing images
+     * when custom parameters are not needed.
+     *
+     * @param originalImage The source image to be processed
+     * @return A processed image with detected cells marked using default parameters
+     */
     @Override
     public Image processImage(Image originalImage) {
         // Default parameters when no sliders are used
@@ -78,7 +95,7 @@ public class BloodCellProcessor implements ImageProcessor {
                 0.0,    // blue
                 50.0,    // redCellThreshold
                 50.0,    // whiteCellThreshold
-                50.0     // minCellSize - set to middle of range (0-100)
+                5.0     // minCellSize - set to middle of range (0-100)
         );
         return processImage(originalImage, defaultParams);
     }
@@ -103,6 +120,16 @@ public class BloodCellProcessor implements ImageProcessor {
         }
     }
 
+
+    /**
+     * Detects cells of a specific type in the image.
+     * This method should implement the cell detection algorithm specific
+     * to each type of blood cell processor.
+     *
+     * @param image The image to analyze for cell detection
+     * @param type The type of cell to detect
+     * @return A List of Rectangles representing the detected cell locations
+     */
     private List<Rectangle> detectCells(Image image, CellType type) {
         List<Rectangle> cells = new ArrayList<>();
         int width = (int) image.getWidth();
@@ -171,6 +198,14 @@ public class BloodCellProcessor implements ImageProcessor {
         return null;
     }
 
+    /**
+     * Marks detected cells on the image with a specified color.
+     * This method draws rectangles around detected cells using the provided color.
+     *
+     * @param image The image on which to mark the cells
+     * @param cells List of rectangles representing detected cell locations
+     * @param color The color to use for marking the cells
+     */
     private void markCells(WritableImage image, List<Rectangle> cells, Color color) {
         for (Rectangle cell : cells) {
             drawRectangle(image, cell, color);
@@ -251,6 +286,14 @@ private void drawCornerPixel(PixelWriter writer, int x, int y, Color color, int 
     }
 }
 
+    /**
+     * Creates a copy of the original image that can be modified.
+     * This method is used to create a working copy of the image that
+     * can be marked up without affecting the original.
+     *
+     * @param originalImage The source image to be copied
+     * @return A WritableImage copy of the original image
+     */
 private WritableImage copyOriginalImage(Image originalImage) {
     int width = (int) originalImage.getWidth();
     int height = (int) originalImage.getHeight();
@@ -267,7 +310,12 @@ private WritableImage copyOriginalImage(Image originalImage) {
 }
 
 
-
+    /**
+     * Gets the name of this processor implementation.
+     * Provides a user-friendly name for the processing algorithm.
+     *
+     * @return The name of the blood cell processor
+     */
 @Override
 public String getProcessorName() {
     return "Blood Cell Analysis";
