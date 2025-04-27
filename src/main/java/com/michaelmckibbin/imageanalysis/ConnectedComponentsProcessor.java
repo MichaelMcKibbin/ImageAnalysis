@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 /**
  * An alternate method of blood cell detection using the Connected Components detection.
  *
- * The TricolourBloodProcessor is used to create a binary image, and then the ConnectedComponentsProcessor
- * is used to detect the connected components in the binary image. The connected components are then
+ * The TricolourBloodProcessor is used to create a three colour image, and then the ConnectedComponentsProcessor
+ * is used to detect the connected components in the image. The connected components are then
  * used to detect the blood cells.
  *
  * TricolourBloodProcessor uses a UnionFind/disjoint sets approach.
