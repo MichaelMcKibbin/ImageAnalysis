@@ -4,10 +4,12 @@ package com.michaelmckibbin.imageanalysis;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -22,6 +24,7 @@ import java.util.List;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import javax.imageio.ImageIO;
@@ -41,6 +44,8 @@ public class ImageAnalysisController {
     @FXML public MenuItem setDefaultImagesDir;
     @FXML public HBox imageChoicesBox;
     @FXML public MenuItem saveImageAs;
+    @FXML public StackPane imageViewStackPane;
+
     @FXML private ImageView imageViewOriginal;
     @FXML private ImageView imageViewProcessed;
     @FXML private ComboBox<ImageProcessor> processorComboBox;
@@ -48,13 +53,13 @@ public class ImageAnalysisController {
     // Sliders
     @FXML private Slider sliderBrightness;
     @FXML private Slider sliderHue;
-    @FXML private Slider sliderMinCellSize;
     @FXML private Slider sliderRed;
     @FXML private Slider sliderGreen;
     @FXML private Slider sliderBlue;
     @FXML public Slider sliderRedCellSensitivity;
     @FXML public Slider sliderWhiteCellSensitivity;
-    @FXML public Slider sliderCellSizeThreshold;
+    @FXML public Slider sliderMinCellSize;
+    @FXML public Slider sliderMaxCellSize;
 
     /**
      * List of available image processors that can be applied to the image.
@@ -81,6 +86,35 @@ public class ImageAnalysisController {
         setupSliderDefaults();
         setupSliderListeners();
         initializeDefaultDirectory();
+
+        // Add click handler to open image in new window
+        imageViewProcessed.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {  // Double click
+                openImageInNewWindow();
+            }
+        });
+
+    }
+
+    private void openImageInNewWindow() {
+        Image image = imageViewProcessed.getImage();
+        if (image == null) return;
+
+        // Create new window components
+        Stage newWindow = new Stage();
+        ImageView newImageView = new ImageView(image);
+        StackPane root = new StackPane(newImageView);
+
+        // Configure ImageView in new window
+        newImageView.setPreserveRatio(true);
+        newImageView.fitWidthProperty().bind(root.widthProperty());
+        newImageView.fitHeightProperty().bind(root.heightProperty());
+
+        // Configure and show new window
+        Scene scene = new Scene(root, 600, 600);
+        newWindow.setTitle("Image View");
+        newWindow.setScene(scene);
+        newWindow.show();
     }
 
     private void setupProcessors() {
@@ -102,7 +136,7 @@ public class ImageAnalysisController {
         imageProcessors = Arrays.asList(
             new OriginalImageProcessor(),
             new BlackAndWhiteProcessor(),
-            //new BloodCellProcessor(),
+            new BloodCellProcessor(),
             //new TricolourBloodProcessor(),
             tricolourProcessor,
             unionFindProcessor,
@@ -162,9 +196,15 @@ public class ImageAnalysisController {
         sliderRedCellSensitivity.setMax(100);
         sliderRedCellSensitivity.setValue(60);  // default value
 
-        sliderCellSizeThreshold.setMin(0);
-        sliderCellSizeThreshold.setMax(100);
-        sliderCellSizeThreshold.setValue(50);  // default value
+        sliderMinCellSize.setMin(0);
+        sliderMinCellSize.setMax(100);
+        sliderMinCellSize.setValue(50);  // default value
+
+        sliderMaxCellSize.setMin(10);
+        sliderMaxCellSize.setMax(20000);
+        sliderMaxCellSize.setValue(5000);
+
+
 
         // Optional: add labels to show current values
         addValueLabel(sliderBrightness, "Brightness: ");
@@ -173,7 +213,8 @@ public class ImageAnalysisController {
         addValueLabel(sliderBlue, "Blue: ");
         addValueLabel(sliderWhiteCellSensitivity, "White Cell Sensitivity: ");
         addValueLabel(sliderRedCellSensitivity, "Red Cell Sensitivity: ");
-        addValueLabel(sliderCellSizeThreshold, "Cell Size Threshold: ");
+        addValueLabel(sliderMinCellSize, "Min Cell Size: ");
+        addValueLabel(sliderMaxCellSize, "Max Cell Size: ");
     }
     private void addValueLabel(Slider slider, String prefix) {
         slider.setShowTickLabels(true);
@@ -184,9 +225,9 @@ public class ImageAnalysisController {
     private void setupSliderListeners() {
         // Create a list of all sliders
         List<Slider> sliders = Arrays.asList(
-            sliderBrightness, sliderHue, sliderMinCellSize,
+            sliderBrightness, sliderHue,
             sliderRed, sliderGreen, sliderBlue,
-            sliderWhiteCellSensitivity, sliderRedCellSensitivity, sliderCellSizeThreshold
+            sliderWhiteCellSensitivity, sliderRedCellSensitivity, sliderMinCellSize, sliderMaxCellSize
         );
 
         // Add listener to each slider with debouncing
@@ -215,7 +256,8 @@ public class ImageAnalysisController {
             System.out.println("Blue: " + sliderBlue.getValue());
             System.out.println("White Cell Sensitivity: " + sliderWhiteCellSensitivity.getValue());
             System.out.println("Red Cell Sensitivity: " + sliderRedCellSensitivity.getValue());
-            System.out.println("Cell Size Threshold: " + sliderCellSizeThreshold.getValue());
+            System.out.println("Cell Size Threshold: " + sliderMinCellSize.getValue());
+            System.out.println("Max Cell Size Threshold: " + sliderMaxCellSize.getValue());
 
             /**
              * Creates processing parameters based on current slider values.
@@ -250,7 +292,8 @@ public class ImageAnalysisController {
             System.out.println("Blue: " + sliderBlue.getValue());
             System.out.println("White Cell Sensitivity: " + sliderWhiteCellSensitivity.getValue());
             System.out.println("Red Cell Sensitivity: " + sliderRedCellSensitivity.getValue());
-            System.out.println("Cell Size Threshold: " + sliderCellSizeThreshold.getValue());
+            System.out.println("Cell Size Threshold: " + sliderMinCellSize.getValue());
+            System.out.println("Max Cell Size Threshold: " + sliderMaxCellSize.getValue());
 
             ProcessingParameters params = createProcessingParameters();
 
@@ -268,8 +311,9 @@ public class ImageAnalysisController {
     }
 
     private ProcessingParameters createProcessingParameters() {
-        double cellSizeValue = sliderCellSizeThreshold.getValue();
-        System.out.println("Cell Size Threshold Slider Value: " + cellSizeValue);
+        double minCellSizeValue = sliderMinCellSize.getValue();
+        System.out.println("Cell Size Threshold Slider Value: " + minCellSizeValue);
+
 
         ProcessingParameters params = new ProcessingParameters(
             sliderBrightness.getValue() / 100.0,  // Convert to -1.0 to 1.0
@@ -280,7 +324,8 @@ public class ImageAnalysisController {
             sliderBlue.getValue() / 100.0,
             sliderRedCellSensitivity.getValue(),
             sliderWhiteCellSensitivity.getValue(),
-            cellSizeValue
+            sliderMinCellSize.getValue(),
+            sliderMaxCellSize.getValue()
         );
 
         System.out.println("Created Parameters - Cell Size: " + params.getMinCellSize());
@@ -297,7 +342,7 @@ public class ImageAnalysisController {
             sliderMinCellSize.setDisable(true);
             sliderWhiteCellSensitivity.setDisable(true);
             sliderRedCellSensitivity.setDisable(true);
-            sliderCellSizeThreshold.setDisable(true);
+            sliderMinCellSize.setDisable(true);
 
             if (currentProcessor instanceof BlackAndWhiteProcessor) {
                 sliderBrightness.setValue(25);
@@ -314,16 +359,36 @@ public class ImageAnalysisController {
                 // Enable blood cell detection sliders
                 sliderWhiteCellSensitivity.setDisable(false);
                 sliderRedCellSensitivity.setDisable(false);
-                sliderCellSizeThreshold.setDisable(false);
+                sliderMinCellSize.setDisable(false);
 
                 // Set default values
                 sliderWhiteCellSensitivity.setValue(40);
                 sliderRedCellSensitivity.setValue(60);
-                sliderCellSizeThreshold.setValue(50);
+                sliderMinCellSize.setValue(50);
                 sliderBrightness.setValue(0);
                 sliderRed.setValue(0);
                 sliderGreen.setValue(0);
                 sliderBlue.setValue(0);
+            }
+            else if (currentProcessor instanceof TricolourBloodProcessor) {
+                sliderBrightness.setValue(0);
+                sliderRed.setValue(0);
+                sliderGreen.setValue(0);
+                sliderBlue.setValue(0);
+                // Enable blood cell detection sliders
+                sliderWhiteCellSensitivity.setDisable(false);
+                sliderRedCellSensitivity.setDisable(false);
+                sliderMinCellSize.setDisable(false);
+            }
+            else if (currentProcessor instanceof UnionFindBloodCellProcessor) {
+                sliderBrightness.setValue(0);
+                sliderRed.setValue(0);
+                sliderGreen.setValue(0);
+                sliderBlue.setValue(0);
+                // Enable blood cell detection sliders
+                sliderWhiteCellSensitivity.setDisable(false);
+                sliderRedCellSensitivity.setDisable(false);
+                sliderMinCellSize.setDisable(false);
             }
             else {
                 sliderBrightness.setValue(0);

@@ -106,7 +106,8 @@ public class OriginalImageProcessor implements ImageProcessor {
                 0.0,     // blue
                 50.0,    // redCellThreshold (not used in this processor)
                 50.0,    // whiteCellThreshold (not used in this processor)
-                50.0     // minCellSize (not used in this processor)
+                50.0,    // minCellSize (not used in this processor)
+                5000 //maxCellSize (not used in this processor)
         );
         System.out.println("Default red parameter: " + defaultParams.getRed());
         return processImage(originalImage, defaultParams);

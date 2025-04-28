@@ -1,6 +1,9 @@
 package com.michaelmckibbin.imageanalysis;
 
 import javafx.geometry.Point2D;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -18,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.michaelmckibbin.imageanalysis.UnionFind;
+import javafx.scene.text.Font;
 
 import java.util.LinkedList;
 //import com.michaelmckibbin.imageanalysis.LinkedList; // need to add Queue...
@@ -34,6 +38,12 @@ import java.util.LinkedList;
 
 public class UnionFindBloodCellProcessor implements ImageProcessor{
 
+    private ProcessingMetrics metrics = new ProcessingMetrics();
+    // Getter
+    public ProcessingMetrics getMetrics() {
+        return metrics;
+    }
+
     /** Threshold value for detecting white blood cells (purple/darker objects) */
     private double whiteCellThreshold;  // For purple/darker objects
 
@@ -45,7 +55,7 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
     //private static final int DEFAULT_MIN_CELL_SIZE = 500;  // Default minimum size - changed to variable
 
     /** Maximum size (in pixels) for a valid cell cluster to prevent false positives */
-    private int maxCellSize = 5000;     // Maximum size to prevent false positives
+    private int maxCellSize;     // Will be set from slider
 
 
     /**
@@ -67,45 +77,93 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
      * @param params Processing parameters containing thresholds and other settings
      * @return A new Image with detected cells marked: blue for white blood cells, green for red blood cells
      */
-    @Override
+@Override
     public Image processImage(Image originalImage, ProcessingParameters params) {
+            long startTotal = System.nanoTime();
 
-        // Debug all incoming parameter values
-        System.out.println("\n*****************************************************");
-        System.out.println("\n* Processing image with UnionFindBloodCellProcessor *");
-        System.out.println("\n*****************************************************");
-        System.out.println("\n");
-        System.out.println("\nIncoming Parameter Values:");
-        System.out.println("White Cell Threshold: " + params.getWhiteCellThreshold());
-        System.out.println("Red Cell Threshold: " + params.getRedCellThreshold());
-        System.out.println("Cell Size Threshold: " + params.getMinCellSize());
+    // Debug all incoming parameter values
+    System.out.println("\n*****************************************************");
+    System.out.println("\n* Processing image with UnionFindBloodCellProcessor *");
+    System.out.println("\n*****************************************************");
+    System.out.println("\n");
+    System.out.println("\nIncoming Parameter Values:");
+    System.out.println("White Cell Threshold: " + params.getWhiteCellThreshold());
+    System.out.println("Red Cell Threshold: " + params.getRedCellThreshold());
+    System.out.println("Min Cell Size: " + params.getMinCellSize());
+    System.out.println("Max Cell Size: " + params.getMaxCellSize());
 
-        // Convert slider value (0-100) to cell size range (1-1000)
-        minCellSize = 1 + (int)(params.getMinCellSize() / 100.0 * 999);
-        System.out.println("Calculated minCellSize: " + minCellSize + " pixels");
+    // Parameter initialization timing
+    long startParams = System.nanoTime();
 
-        // Debug output
-        System.out.println("\nSlider Values:");
-        System.out.println("Cell Size Threshold slider: " + params.getMinCellSize());
-        System.out.println("Minimum Cell Size: " + minCellSize + " pixels");
+    minCellSize = 1 + (int)(params.getMinCellSize() / 100.0 * 999);
+    maxCellSize = (int)(100 + (params.getMaxCellSize() / 100.0 * (20000 - 100)));
 
-        whiteCellThreshold = params.getWhiteCellThreshold() / 100.0;
-        redCellThreshold = params.getRedCellThreshold() / 100.0;
 
-        WritableImage processedImage = copyOriginalImage(originalImage);
+    whiteCellThreshold = params.getWhiteCellThreshold() / 100.0;
+    redCellThreshold = params.getRedCellThreshold() / 100.0;
 
-        List<Rectangle> whiteCells = detectCells(originalImage, UnionFindBloodCellProcessor.CellType.WHITE_CELL);
-        List<Rectangle> redCells = detectCells(originalImage, UnionFindBloodCellProcessor.CellType.RED_CELL);
+    long endParams = System.nanoTime();
 
-        System.out.println("\nDetection Results:");
-        System.out.println("White cells detected (Purple Dye): " + whiteCells.size());
-        System.out.println("Red cells detected: (Pink Dye) " + redCells.size());
+    // Image copy timing
+    long startCopy = System.nanoTime();
+    WritableImage processedImage = copyOriginalImage(originalImage);
+    long endCopy = System.nanoTime();
 
-        markCells(processedImage, whiteCells, Color.BLUE);
-        markCells(processedImage, redCells, Color.GREEN);
+    // White cell detection timing
+    long startWhiteCells = System.nanoTime();
+    List<Rectangle> whiteCells = detectCells(originalImage, UnionFindBloodCellProcessor.CellType.WHITE_CELL);
+    long endWhiteCells = System.nanoTime();
 
-        return processedImage;
-    }
+    // Red cell detection timing
+    long startRedCells = System.nanoTime();
+    List<Rectangle> redCells = detectCells(originalImage, UnionFindBloodCellProcessor.CellType.RED_CELL);
+    long endRedCells = System.nanoTime();
+
+    // Cell marking timing
+    long startMarking = System.nanoTime();
+    markCells(processedImage, whiteCells, Color.DARKRED);
+    markCells(processedImage, redCells, Color.DARKBLUE);
+    long endMarking = System.nanoTime();
+
+    // Calculate total time
+    long endTotal = System.nanoTime();
+
+    // Print performance metrics
+    System.out.println("\nPerformance Metrics:");
+    System.out.println("--------------------");
+    System.out.printf("Parameter initialization: %.2f ms%n", (endParams - startParams) / 1_000_000.0);
+    System.out.printf("Image copy: %.2f ms%n", (endCopy - startCopy) / 1_000_000.0);
+    System.out.printf("White cell detection: %.2f ms%n", (endWhiteCells - startWhiteCells) / 1_000_000.0);
+    System.out.printf("Red cell detection: %.2f ms%n", (endRedCells - startRedCells) / 1_000_000.0);
+    System.out.printf("Cell marking: %.2f ms%n", (endMarking - startMarking) / 1_000_000.0);
+    System.out.printf("Total processing time: %.2f ms%n", (endTotal - startTotal) / 1_000_000.0);
+    System.out.println();
+    // Print averages of metrics
+    metrics.printAverages();
+    System.out.println();
+
+    // Print detection results
+    System.out.println("\nDetection Results:");
+    System.out.println("White cells detected (Purple Dye): " + whiteCells.size());
+    System.out.println("Red cells detected: (Pink Dye) " + redCells.size());
+
+    // Calculate cells per second
+    double totalTimeSeconds = (endTotal - startTotal) / 1_000_000_000.0;
+    int totalCells = whiteCells.size() + redCells.size();
+    double cellsPerSecond = totalCells / totalTimeSeconds;
+    System.out.printf("Processing speed: %.1f cells/second%n", cellsPerSecond);
+
+        metrics.addMetrics(
+                (endWhiteCells - startWhiteCells) / 1_000_000.0,
+                (endRedCells - startRedCells) / 1_000_000.0,
+                (endTotal - startTotal) / 1_000_000.0,
+                cellsPerSecond
+        );
+
+    return processedImage;
+
+}
+
 
 
     /**
@@ -126,7 +184,8 @@ public class UnionFindBloodCellProcessor implements ImageProcessor{
                 0.0,    // blue
                 0.5,    // redCellThreshold
                 50.0,    // whiteCellThreshold
-                5.0     // minCellSize - set to middle of range (0-100)
+                0.0,   // minCellSize
+                5000 //maxCellSize
         );
         return processImage(originalImage, defaultParams);
     }
@@ -425,11 +484,54 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
         return null;
     }
 
+//    private void markCells(WritableImage image, List<Rectangle> cells, Color color) {
+//        for (Rectangle cell : cells) {
+//            drawRectangle(image, cell, color);
+//        }
+//    }
+
     private void markCells(WritableImage image, List<Rectangle> cells, Color color) {
-        for (Rectangle cell : cells) {
+        // Create a Canvas to overlay text
+        Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        // Draw the original image onto the canvas
+        gc.drawImage(image, 0, 0);
+
+        // Set up text properties
+        gc.setFill(color);
+        gc.setFont(new Font("Arial", 18)); // Adjust font and size as needed
+
+        // Draw rectangles and numbers
+        for (int i = 0; i < cells.size(); i++) {
+            Rectangle cell = cells.get(i);
             drawRectangle(image, cell, color);
+
+            // Draw cell number
+            String number = String.valueOf(i + 1);
+            gc.fillText(number,
+                    cell.getX() + 10, // Position slightly inside top left corner of the rectangle. (Negative value is outside and above)
+                    cell.getY() + 25); // Position slightly inside top left corner of the rectangle. (Negative value is outside and above)
+        }
+
+        // Convert canvas back to WritableImage
+        SnapshotParameters params = new SnapshotParameters();
+        WritableImage newImage = canvas.snapshot(params, null);
+
+        // Copy the text overlay back to the original image
+        PixelWriter writer = image.getPixelWriter();
+        PixelReader reader = newImage.getPixelReader();
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                Color pixelColor = reader.getColor(x, y);
+                // Only copy non-transparent pixels (the text)
+                if (pixelColor.getOpacity() > 0) {
+                    writer.setColor(x, y, pixelColor);
+                }
+            }
         }
     }
+
 
     // Helper methods for drawing...
     private void drawRectangle(WritableImage image, Rectangle rect, Color color) {
@@ -438,7 +540,7 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
         int y = (int) rect.getY();
         int width = (int) rect.getWidth();
         int height = (int) rect.getHeight();
-        int thickness = 4;
+        int thickness = 2;
 
         // Cast image dimensions to int
         int imageWidth = (int) image.getWidth();
@@ -517,7 +619,9 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
                 writer.setColor(x, y, reader.getColor(x, y));
             }
         }
+
         return processedImage;
+
     }
 
 

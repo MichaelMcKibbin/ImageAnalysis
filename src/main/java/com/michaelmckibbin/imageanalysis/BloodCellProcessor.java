@@ -69,8 +69,8 @@ public class BloodCellProcessor implements ImageProcessor {
         System.out.println("White (Purple) cells detected: " + whiteCells.size());
         System.out.println("Red (Dark Pink) cells detected: " + redCells.size());
 
-        markCells(processedImage, whiteCells, Color.BLUE);
-        markCells(processedImage, redCells, Color.GREEN);
+        markCells(processedImage, whiteCells, Color.DARKRED);
+        markCells(processedImage, redCells, Color.DARKBLUE);
 
         return processedImage;
     }
@@ -95,7 +95,8 @@ public class BloodCellProcessor implements ImageProcessor {
                 0.0,    // blue
                 50.0,    // redCellThreshold
                 50.0,    // whiteCellThreshold
-                5.0     // minCellSize - set to middle of range (0-100)
+                0.0,   // minCellSize
+                5000 //maxCellSize
         );
         return processImage(originalImage, defaultParams);
     }
