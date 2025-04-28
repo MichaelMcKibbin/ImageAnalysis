@@ -2,6 +2,8 @@
 
 An application for analyzing microscope images to detect and count blood cells using computer vision techniques.
 
+![Original Image](docs/images/Main_view.jpg "Analysis in action!")
+
 ## Overview
 
 This JavaFX application processes microscope images of blood samples to identify and count individual blood cells. It uses image processing techniques including thresholding, connected component analysis, and size-based filtering.
@@ -24,9 +26,35 @@ The analysis process follows these steps:
 
    <br>
 
+3. **Tricolour Analysis**
+   - Classifies detected cells based on size characteristics
+   - Uses color coding to visualize different cell categories:
+      - Pink: Red Blood Cells
+      - Purple: White Blood Cell Nuclei
+   - Eliminates cell border detection errors by turning the background white.
 
-![Example Input Image](docs/images/original_image.jpg)
-![Analysis Result](docs/images/processed_image.jpg)
+   <br>
+
+<figure>
+  <img src="docs/images/original_image.jpg" alt="Example Input Image" title="Original microscope image of blood cells">
+  <figcaption>Original microscope image showing blood cells</figcaption>
+</figure>
+
+ <br>
+
+<figure>
+  <img src="docs/images/processed_image.jpg" alt="Analysis Result" title="Blood cells detected and highlighted using image processing">
+  <figcaption>Processed image with detected blood cells highlighted</figcaption>
+</figure>
+
+ <br>
+
+<figure>
+  <img src="docs/images/processed_tricolour_image.jpg" alt="Tricolour Analysis Result" title="Size-based classification: green (normal), blue (small), red (large)">
+  <figcaption>Tricolour visualization showing cell classification</figcaption>
+</figure>
+
+ <br>
 
 ## Features
 
