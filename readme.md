@@ -50,7 +50,7 @@ The analysis process follows these steps:
  <br>
 
 <figure>
-  <img src="docs/images/processed_tricolour_image.jpg" alt="Tricolour Analysis Result" title="Size-based classification: green (normal), blue (small), red (large)">
+  <img src="docs/images/processed_tricolour_image.jpg" alt="Tricolour Analysis Result" title="Eliminating background and defining Red and White Cells">
   <figcaption>Tricolour visualization showing cell classification</figcaption>
 </figure>
 
