@@ -35,6 +35,8 @@ The analysis process follows these steps:
 
    <br>
 
+## Sample Images
+#### Original (stained) Slide Image
 <figure>
   <img src="docs/images/original_image.jpg" alt="Example Input Image" title="Original microscope image of blood cells">
   <figcaption>Original microscope image showing blood cells</figcaption>
@@ -42,6 +44,7 @@ The analysis process follows these steps:
 
  <br>
 
+#### Processed Image with Cells defined and counted
 <figure>
   <img src="docs/images/processed_image.jpg" alt="Analysis Result" title="Blood cells detected and highlighted using image processing">
   <figcaption>Processed image with detected blood cells highlighted</figcaption>
@@ -49,6 +52,7 @@ The analysis process follows these steps:
 
  <br>
 
+#### Tricolour Process
 <figure>
   <img src="docs/images/processed_tricolour_image.jpg" alt="Tricolour Analysis Result" title="Eliminating background and defining Red and White Cells">
   <figcaption>Tricolour visualization showing cell classification</figcaption>
