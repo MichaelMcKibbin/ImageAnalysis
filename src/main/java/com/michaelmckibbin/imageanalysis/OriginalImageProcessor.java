@@ -20,6 +20,10 @@ public class OriginalImageProcessor implements ImageProcessor {
      *          - 0.0 represents original brightness (2^0 = 1.0)
      *          - Negative values darken the image
      *          - Positive values brighten the image
+     *
+     * @author Michael McKibbin (20092733)
+     *
+     *
      */
     @Override
     public Image processImage(Image originalImage, ProcessingParameters params) {

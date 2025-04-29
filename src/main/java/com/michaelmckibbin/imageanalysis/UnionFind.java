@@ -6,8 +6,9 @@ package com.michaelmckibbin.imageanalysis;
  * This class is used in the blood cell analysis to efficiently
  * manage and merge disjoint sets of pixels.
  *
- * @see BloodCellProcessor
- * @see UnionFindBloodCellProcessor
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
  */
 
 public class UnionFind {

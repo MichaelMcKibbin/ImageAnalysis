@@ -25,6 +25,11 @@ import javafx.scene.text.Font;
  *     <li>Red blood cells (appearing as pink in stained samples)</li>
  * </ul>
  * The processor uses colour thresholds and connected component (pixel grouping) analysis to identify cell clusters.
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
+ *
  */
 
 public class UnionFindBloodCellProcessor implements ImageProcessor{

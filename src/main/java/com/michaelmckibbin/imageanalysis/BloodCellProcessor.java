@@ -162,6 +162,9 @@ public class BloodCellProcessor implements ImageProcessor {
      * Draws a rectangle around the detected cell
      * Uses heap memory to store visited pixel information to avoid stack overflow risks
      *
+     * @author Michael McKibbin (20092733)
+     *
+     *
      * @param startX The starting X coordinate
      * @param startY The starting Y coordinate
      * @param image The image being analyzed

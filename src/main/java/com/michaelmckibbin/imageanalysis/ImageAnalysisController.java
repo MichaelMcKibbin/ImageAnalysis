@@ -481,6 +481,10 @@ private void handleOpenFile(ActionEvent actionEvent) {
  * Maintains the original file format while allowing user to choose a different format.
  *
  * @param actionEvent The action event triggered by the save button
+ *
+ * @author Michael McKibbin (20092733)
+ *
+ *
  */
 @FXML
 private void handleSaveImageAs(ActionEvent actionEvent) {

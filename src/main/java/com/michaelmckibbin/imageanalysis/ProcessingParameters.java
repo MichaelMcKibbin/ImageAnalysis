@@ -4,6 +4,9 @@ package com.michaelmckibbin.imageanalysis;
  * Encapsulates parameters for image processing and cell detection in blood cell analysis.
  * This class holds values for both image adjustment and cell detection thresholds.
  *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
  * Image adjustment parameters include:
  * - brightness: Adjusts overall image brightness
  * - saturation: Controls color saturation
@@ -22,6 +25,7 @@ package com.michaelmckibbin.imageanalysis;
  *
  * @see BloodCellProcessor
  * @see ImageProcessor
+ *
  */
 
 /**

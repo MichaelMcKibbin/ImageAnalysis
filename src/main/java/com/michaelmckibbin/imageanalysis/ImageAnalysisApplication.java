@@ -8,6 +8,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Main application class for the Image Analysis program.
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ */
 public class ImageAnalysisApplication extends Application {
 @Override
 public void start(Stage stage) throws IOException {

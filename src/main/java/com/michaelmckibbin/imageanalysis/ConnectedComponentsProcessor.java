@@ -14,6 +14,10 @@ import java.util.function.Consumer;
  * used to detect the blood cells.
  *
  * TricolourBloodProcessor uses a UnionFind/disjoint sets approach.
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
  */
 public class ConnectedComponentsProcessor implements ImageProcessor {
     private int width;

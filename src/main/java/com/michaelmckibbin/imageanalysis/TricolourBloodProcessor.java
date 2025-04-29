@@ -35,6 +35,11 @@ import com.michaelmckibbin.imageanalysis.UnionFind;
  * The red blood cells should be coloured red.
  * Platelets should be filtered out by size as much as possible.
  * The background should be white.
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
+ *
  */
 
 public class TricolourBloodProcessor implements ImageProcessor {

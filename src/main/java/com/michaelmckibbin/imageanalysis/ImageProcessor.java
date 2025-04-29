@@ -12,6 +12,10 @@ import java.util.List;
 
 /** The interface defines the contract that all image processors must follow
  *
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
  */
 public interface ImageProcessor {
     Image processImage(Image originalImage, ProcessingParameters params);

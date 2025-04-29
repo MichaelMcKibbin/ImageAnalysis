@@ -17,6 +17,10 @@ import java.util.*;
  * </ul>
  *
  * @param <N> the type of elements held in this linked list
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 2.0 (2024-02-20)
+ *
  */
 
 public class LinkedList<N> implements Iterable<N>, Serializable {
@@ -164,7 +168,7 @@ public class LinkedList<N> implements Iterable<N>, Serializable {
 
     /**
      * Retrieves the last element in the list.
-     * @return
+     * @return the last element in the list
      * @throws NoSuchElementException if the list is empty
      */
     public N getLast() {

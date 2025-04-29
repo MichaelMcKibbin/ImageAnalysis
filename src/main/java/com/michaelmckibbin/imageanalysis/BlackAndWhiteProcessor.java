@@ -10,6 +10,11 @@ import javafx.scene.paint.Color;
  * Processes images to convert them to black and white using configurable thresholds
  * and RGB channel weightings. This processor implements advanced image processing
  * techniques considering human visual perception for optimal black and white conversion.
+ *
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
  */
 public class BlackAndWhiteProcessor implements ImageProcessor {
     /**

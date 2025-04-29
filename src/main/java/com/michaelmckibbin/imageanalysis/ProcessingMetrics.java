@@ -3,6 +3,15 @@ package com.michaelmckibbin.imageanalysis;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This class is responsible for calculating and storing performance metrics
+ * for the blood cell detection process.
+ *
+ * @author Michael McKibbin (20092733)
+ * @version 1.0 (2024-02-20)
+ *
+ */
 public class ProcessingMetrics {
     private List<Double> whiteCellTimes = new ArrayList<>();
     private List<Double> redCellTimes = new ArrayList<>();
