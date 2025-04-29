@@ -1,34 +1,33 @@
 
 package com.michaelmckibbin.imageanalysis;
 
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-
-import java.awt.*;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-
-import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
-
-import javax.imageio.ImageIO;
-
 
 
 /**
@@ -37,15 +36,10 @@ import javax.imageio.ImageIO;
  * Supports multiple image processing modes, adjustments, and cell detection parameters.
  */
 public class ImageAnalysisController {
-    @FXML public HBox slidersHbox1;
-    @FXML public HBox slidersHbox2;
-    @FXML public HBox slidersHbox3;
+
     @FXML public MenuItem loadImage;
     @FXML public MenuItem setDefaultImagesDir;
-    @FXML public HBox imageChoicesBox;
     @FXML public MenuItem saveImageAs;
-    @FXML public StackPane imageViewStackPane;
-
     @FXML private ImageView imageViewOriginal;
     @FXML private ImageView imageViewProcessed;
     @FXML private ComboBox<ImageProcessor> processorComboBox;
@@ -62,23 +56,15 @@ public class ImageAnalysisController {
     @FXML public Slider sliderMaxCellSize;
 
     /**
-     * List of available image processors that can be applied to the image.
+     * Stores reference to the currently loaded image file.
+     * Used for determining default save names and formats.
      */
-    private List<ImageProcessor> imageProcessors;
-
+    private File currentImageFile;
     /**
      * Stores the directory where the application is running.
      * Used for setting default save locations.
      */
     private File defaultImageDirectory;
-
-    private TricolourBloodProcessor tricolourProcessor;
-
-    /**
-     * Stores reference to the currently loaded image file.
-     * Used for determining default save names and formats.
-     */
-    private File currentImageFile;
 
     @FXML
     private void initialize() {
@@ -123,35 +109,32 @@ public class ImageAnalysisController {
 
         // Initialize processors that need callbacks
         ConnectedComponentsProcessor unionFindProcessor = new ConnectedComponentsProcessor();
-        unionFindProcessor.setResultCallback(processedImage -> {
-            imageViewProcessed.setImage(processedImage);
-        });
+        unionFindProcessor.setResultCallback(processedImage -> imageViewProcessed.setImage(processedImage));
 
-        tricolourProcessor = new TricolourBloodProcessor();
-        tricolourProcessor.setImageDisplayCallback(image -> {
-            imageViewProcessed.setImage(image);
-        });
+        TricolourBloodProcessor tricolourProcessor = new TricolourBloodProcessor();
+        tricolourProcessor.setImageDisplayCallback(image -> imageViewProcessed.setImage(image));
 
-        // Initialize and add all processors
-        imageProcessors = Arrays.asList(
-            new OriginalImageProcessor(),
-            new BlackAndWhiteProcessor(),
-            new BloodCellProcessor(),
-            //new TricolourBloodProcessor(),
-            tricolourProcessor,
-            unionFindProcessor,
-            new UnionFindBloodCellProcessor()
-            //new ConnectedComponentsProcessor()
+        // Initialize and add all processors to list
+        List<ImageProcessor> imageProcessors = Arrays.asList(
+                new OriginalImageProcessor(),
+                new BlackAndWhiteProcessor(),
+                new BloodCellProcessor(),
+                //new TricolourBloodProcessor(),
+                tricolourProcessor,
+                unionFindProcessor,
+                new UnionFindBloodCellProcessor()
+                //new ConnectedComponentsProcessor()
         );
 
         processorComboBox.getItems().addAll(imageProcessors);
 
         // Set up the combo box converter
-        processorComboBox.setConverter(new StringConverter<ImageProcessor>() {
+        processorComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(ImageProcessor processor) {
                 return processor != null ? processor.getProcessorName() : "";
             }
+
             @Override
             public ImageProcessor fromString(String string) {
                 return null;
@@ -231,18 +214,18 @@ public class ImageAnalysisController {
         );
 
         // Add listener to each slider with debouncing
-        sliders.forEach(slider -> {
-            slider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                if (Math.abs(newVal.doubleValue() - oldVal.doubleValue()) > 0.01) {
-                    updateImage();
-                }
-            });
-        });
+        sliders.forEach(slider -> slider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (Math.abs(newVal.doubleValue() - oldVal.doubleValue()) > 0.01) {
+                updateImage();
+            }
+        }));
     }
 
     /**
      * Updates the image view with a new image.
      * Adjusts the view to fit the window while maintaining aspect ratio.
+     * Creates processing parameters based on current slider values.
+     * Combines all adjustment parameters into a single ProcessingParameters object.
      */
     private void updateImage() {
         ImageProcessor selectedProcessor = processorComboBox.getValue();
@@ -259,12 +242,6 @@ public class ImageAnalysisController {
             System.out.println("Cell Size Threshold: " + sliderMinCellSize.getValue());
             System.out.println("Max Cell Size Threshold: " + sliderMaxCellSize.getValue());
 
-            /**
-             * Creates processing parameters based on current slider values.
-             * Combines all adjustment parameters into a single ProcessingParameters object.
-             *
-             * @return ProcessingParameters object containing current adjustment values
-             */
             ProcessingParameters params = createProcessingParameters();
 
             // Handle async processors differently
@@ -344,57 +321,59 @@ public class ImageAnalysisController {
             sliderRedCellSensitivity.setDisable(true);
             sliderMinCellSize.setDisable(true);
 
-            if (currentProcessor instanceof BlackAndWhiteProcessor) {
-                sliderBrightness.setValue(25);
-                sliderRed.setValue(50);
-                sliderGreen.setValue(50);
-                sliderBlue.setValue(50);
-            }
-            else if (currentProcessor instanceof BloodCellProcessor) {
-                defaults = ProcessingParameters.getDefaultBloodCellDetection();
-                sliderHue.setDisable(false);
-                sliderMinCellSize.setDisable(false);
-            }
-            else if (currentProcessor instanceof ConnectedComponentsProcessor) {
-                // Enable blood cell detection sliders
-                sliderWhiteCellSensitivity.setDisable(false);
-                sliderRedCellSensitivity.setDisable(false);
-                sliderMinCellSize.setDisable(false);
+            switch (currentProcessor) {
+                case BlackAndWhiteProcessor blackAndWhiteProcessor -> {
+                    sliderBrightness.setValue(25);
+                    sliderRed.setValue(50);
+                    sliderGreen.setValue(50);
+                    sliderBlue.setValue(50);
+                }
+                case BloodCellProcessor bloodCellProcessor -> {
+                    defaults = ProcessingParameters.getDefaultBloodCellDetection();
+                    sliderHue.setDisable(false);
+                    sliderMinCellSize.setDisable(false);
+                }
+                case ConnectedComponentsProcessor connectedComponentsProcessor -> {
+                    // Enable blood cell detection sliders
+                    sliderWhiteCellSensitivity.setDisable(false);
+                    sliderRedCellSensitivity.setDisable(false);
+                    sliderMinCellSize.setDisable(false);
 
-                // Set default values
-                sliderWhiteCellSensitivity.setValue(40);
-                sliderRedCellSensitivity.setValue(60);
-                sliderMinCellSize.setValue(50);
-                sliderBrightness.setValue(0);
-                sliderRed.setValue(0);
-                sliderGreen.setValue(0);
-                sliderBlue.setValue(0);
-            }
-            else if (currentProcessor instanceof TricolourBloodProcessor) {
-                sliderBrightness.setValue(0);
-                sliderRed.setValue(0);
-                sliderGreen.setValue(0);
-                sliderBlue.setValue(0);
-                // Enable blood cell detection sliders
-                sliderWhiteCellSensitivity.setDisable(false);
-                sliderRedCellSensitivity.setDisable(false);
-                sliderMinCellSize.setDisable(false);
-            }
-            else if (currentProcessor instanceof UnionFindBloodCellProcessor) {
-                sliderBrightness.setValue(0);
-                sliderRed.setValue(0);
-                sliderGreen.setValue(0);
-                sliderBlue.setValue(0);
-                // Enable blood cell detection sliders
-                sliderWhiteCellSensitivity.setDisable(false);
-                sliderRedCellSensitivity.setDisable(false);
-                sliderMinCellSize.setDisable(false);
-            }
-            else {
-                sliderBrightness.setValue(0);
-                sliderRed.setValue(0);
-                sliderGreen.setValue(0);
-                sliderBlue.setValue(0);
+                    // Set default values
+                    sliderWhiteCellSensitivity.setValue(40);
+                    sliderRedCellSensitivity.setValue(60);
+                    sliderMinCellSize.setValue(50);
+                    sliderBrightness.setValue(0);
+                    sliderRed.setValue(0);
+                    sliderGreen.setValue(0);
+                    sliderBlue.setValue(0);
+                }
+                case TricolourBloodProcessor tricolourBloodProcessor -> {
+                    sliderBrightness.setValue(0);
+                    sliderRed.setValue(0);
+                    sliderGreen.setValue(0);
+                    sliderBlue.setValue(0);
+                    // Enable blood cell detection sliders
+                    sliderWhiteCellSensitivity.setDisable(false);
+                    sliderRedCellSensitivity.setDisable(false);
+                    sliderMinCellSize.setDisable(false);
+                }
+                case UnionFindBloodCellProcessor unionFindBloodCellProcessor -> {
+                    sliderBrightness.setValue(0);
+                    sliderRed.setValue(0);
+                    sliderGreen.setValue(0);
+                    sliderBlue.setValue(0);
+                    // Enable blood cell detection sliders
+                    sliderWhiteCellSensitivity.setDisable(false);
+                    sliderRedCellSensitivity.setDisable(false);
+                    sliderMinCellSize.setDisable(false);
+                }
+                default -> {
+                    sliderBrightness.setValue(0);
+                    sliderRed.setValue(0);
+                    sliderGreen.setValue(0);
+                    sliderBlue.setValue(0);
+                }
             }
             updateImage();
         }
@@ -434,10 +413,10 @@ public class ImageAnalysisController {
  * Handles the opening of image files.
  * Displays a file chooser dialog with "All Images" as the default filter option.
  *
- * @param event The action event triggered by the open file button
+ * @param actionEvent The action event triggered by the open file button
  */
 @FXML
-private void handleOpenFile(ActionEvent event) {
+private void handleOpenFile(ActionEvent actionEvent) {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open Image File");
     fileChooser.setInitialDirectory(defaultImageDirectory);
@@ -501,19 +480,16 @@ private void handleOpenFile(ActionEvent event) {
  * Saves the processed image with a filename based on the original name plus timestamp.
  * Maintains the original file format while allowing user to choose a different format.
  *
- * @param event The action event triggered by the save button
+ * @param actionEvent The action event triggered by the save button
  */
 @FXML
-private void handleSaveImageAs(ActionEvent event) {
+private void handleSaveImageAs(ActionEvent actionEvent) {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Image File");
     fileChooser.setInitialDirectory(defaultImageDirectory);
 
 
-    /**
-     * Configuration for the file chooser dialog.
-     * Add support for multiple common image formats.
-     */
+    //Configure list of file types for the file chooser dialog.
     fileChooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tif", "*.tiff", "*.webp"),
             new FileChooser.ExtensionFilter("PNG Files", "*.png"),
@@ -546,7 +522,7 @@ private void handleSaveImageAs(ActionEvent event) {
         }
     } else {
         fileChooser.setInitialFileName("processed_image_" + timestamp + ".png");
-        fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0)); // PNG default
+        fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0)); // index of fileChooser.getExtensionFilters() list
     }
 
     File selectedFile = fileChooser.showSaveDialog(null);

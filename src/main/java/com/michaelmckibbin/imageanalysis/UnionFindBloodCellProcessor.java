@@ -1,6 +1,5 @@
 package com.michaelmckibbin.imageanalysis;
 
-import javafx.geometry.Point2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,21 +9,13 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.util.*;
 import java.util.stream.Collectors;
-
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-
-import com.michaelmckibbin.imageanalysis.UnionFind;
 import javafx.scene.text.Font;
-
-import java.util.LinkedList;
-//import com.michaelmckibbin.imageanalysis.LinkedList; // need to add Queue...
 
 /**
  * Processes blood cell images using a Union-Find algorithm to detect and classify blood cells.
@@ -279,25 +270,41 @@ private Rectangle getBoundingRectangle(List<Point> points) {
         double redComponent = color.getRed();
         double blueComponent = color.getBlue();
 
-        switch (type) {
-            case WHITE_CELL:
+        // original switch method
+//        switch (type) {
+//           case WHITE_CELL:
+//                // White blood cells are typically darker (purple)
+//                // Check if the pixel is dark enough and has more blue component
+//                return brightness < whiteCellThreshold && blueComponent > redComponent;
+//
+//            case RED_CELL:
+//                // Red blood cells are typically pink/red
+//                // Check if the pixel has strong red component but isn't too bright
+//                return redComponent > redCellThreshold &&
+//                        redComponent > blueComponent &&
+//                        brightness < 0.8;
+//
+//            default:
+//                return false;
+//        }
+//
+
+        // enhanced switch method
+        return switch (type) {
+            case WHITE_CELL ->
                 // White blood cells are typically darker (purple)
                 // Check if the pixel is dark enough and has more blue component
-                return brightness < whiteCellThreshold && blueComponent > redComponent;
-
-            case RED_CELL:
+                    brightness < whiteCellThreshold && blueComponent > redComponent;
+            case RED_CELL ->
                 // Red blood cells are typically pink/red
                 // Check if the pixel has strong red component but isn't too bright
-                return redComponent > redCellThreshold &&
-                        redComponent > blueComponent &&
-                        brightness < 0.8;
-
-            default:
-                return false;
-        }
+                    redComponent > redCellThreshold &&
+                            redComponent > blueComponent &&
+                            brightness < 0.8;
+        };
     }
 
-//    // TRY HSV (Hue, Saturation, Value)
+//    // TRY HSV (Hue, Saturation, Value) method
 //    private boolean isCellOfType(Color color, CellType type) {
 //        double brightness = (color.getRed() + color.getGreen() + color.getBlue()) / 3.0;
 //        double[] hsv = rgbToHsv(color.getRed(), color.getGreen(), color.getBlue());
@@ -429,66 +436,6 @@ private List<Rectangle> detectCells(Image image, CellType cellType) {
             .map(this::getBoundingRectangle)
             .collect(Collectors.toList());
 }
-
-    /**
-     * Performs a flood fill operation starting from a given point to identify a complete cell.
-     *
-     * @param startX The starting X coordinate
-     * @param startY The starting Y coordinate
-     * @param image The image being analyzed
-     * @param visited Array tracking visited pixels
-     * @param type The type of cell being detected
-     * @return Rectangle representing the bounding box of the detected cell
-     */
-    private Rectangle floodFill(int startX, int startY, Image image, boolean[][] visited, UnionFindBloodCellProcessor.CellType type) {
-        Queue<Point2D> queue = new LinkedList<>();
-        queue.add(new Point2D(startX, startY));
-
-        int minX = startX, maxX = startX, minY = startY, maxY = startY;
-        int pixelCount = 0;
-        PixelReader reader = image.getPixelReader();
-
-        while (!queue.isEmpty()) {
-            Point2D p = queue.poll();
-            int x = (int) p.getX();
-            int y = (int) p.getY();
-
-            if (x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight()
-                    || visited[x][y]) {
-                continue;
-            }
-
-            Color color = reader.getColor(x, y);
-            if (!isCellOfType(color, type)) {
-                continue;
-            }
-
-            visited[x][y] = true;
-            pixelCount++;
-
-            minX = Math.min(minX, x);
-            maxX = Math.max(maxX, x);
-            minY = Math.min(minY, y);
-            maxY = Math.max(maxY, y);
-
-            // Add adjacent pixels to queue
-            queue.add(new Point2D(x + 1, y));
-            queue.add(new Point2D(x - 1, y));
-            queue.add(new Point2D(x, y + 1));
-            queue.add(new Point2D(x, y - 1));
-        }
-
-        if (pixelCount >= minCellSize && pixelCount <= maxCellSize) {
-            return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
-        }
-        return null;
-    }
-
-//    private void markCells(WritableImage image, List<Rectangle> cells, Color color) {
-//        for (Rectangle cell : cells) {
-//            drawRectangle(image, cell, color);
-//        }
-//    }
 
     private void markCells(WritableImage image, List<Rectangle> cells, Color color) {
         // Create a Canvas to overlay text

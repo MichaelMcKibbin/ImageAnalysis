@@ -1,6 +1,6 @@
 # Blood Cell Image Analysis
 
-An application for analyzing microscope images to detect and count blood cells using computer vision techniques.
+ 
 
 ![Original Image](docs/images/Main_view.jpg "Analysis in action!")
 
@@ -10,28 +10,18 @@ This JavaFX application processes microscope images of blood samples to identify
 
 ## How It Works
 
-The analysis process follows these steps:
+The analysis process includes these steps:
 
-1. **Image Pre-processing**
-   - Converts the image to grayscale
-   - Applies brightness adjustments
+   - Converts the image to three colours
    - Uses thresholding to separate cells from background
-   
-   <br>
-
-2. **Cell Detection**
    - Implements Union-Find algorithm to identify connected components
-   - Filters components based on size parameters to identify individual cells
-   - Marks detected cells on the image
-
-   <br>
-
-3. **Tricolour Analysis**
-   - Classifies detected cells based on size characteristics
+   - Differentiates Red and White Cells
+   - Classifies detected cells based on size & colour
    - Uses color coding to visualize different cell categories:
       - Pink: Red Blood Cells
       - Purple: White Blood Cell Nuclei
-   - Eliminates cell border detection errors by turning the background white.
+   - Removes background colour & noise
+   - Marks detected cells on the image
 
    <br>
 
@@ -64,11 +54,11 @@ The analysis process follows these steps:
 
 - Real-time parameter adjustment
 - Visual feedback of detection results
-- Size-based filtering to distinguish cells
+- Adjustable filtering to refine results
 - Cell count statistics
 
 ## Technical Details
 
-- Built with JavaFX and OpenCV
-- Uses Union-Find algorithm for connected component labeling
+- Built with Java & JavaFX
+- Uses a Union-Find algorithm for cell identification
 - Implements custom image processing filters
