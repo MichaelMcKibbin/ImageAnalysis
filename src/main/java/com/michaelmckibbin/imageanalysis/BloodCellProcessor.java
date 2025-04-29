@@ -155,6 +155,20 @@ public class BloodCellProcessor implements ImageProcessor {
         return cells;
     }
 
+
+    /**
+     * Performs a flood fill operation starting from a given point to identify a complete cell.
+     * Uses iterative Queue to track visited & connected pixels
+     * Draws a rectangle around the detected cell
+     * Uses heap memory to store visited pixel information to avoid stack overflow risks
+     *
+     * @param startX The starting X coordinate
+     * @param startY The starting Y coordinate
+     * @param image The image being analyzed
+     * @param visited Array tracking visited pixels
+     * @param type The type of cell being detected - WHITE_CELL or RED_CELL
+     * @return Rectangle representing the bounding box of the detected cell
+     */
     private Rectangle floodFill(int startX, int startY, Image image, boolean[][] visited, CellType type) {
         Queue<Point2D> queue = new LinkedList<>();
         queue.add(new Point2D(startX, startY));

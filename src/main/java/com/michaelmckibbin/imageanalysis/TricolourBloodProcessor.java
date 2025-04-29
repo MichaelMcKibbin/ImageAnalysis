@@ -106,7 +106,7 @@ public class TricolourBloodProcessor implements ImageProcessor {
 
             // Create a pause using Timeline
             Timeline pause = new Timeline(
-                    new KeyFrame(Duration.seconds(3), event -> {
+                    new KeyFrame(Duration.seconds(2), event -> {
                         // After pause, proceed with second pass
                         processSecondPass(initialDetection, processedImage, width, height);
 
@@ -254,14 +254,14 @@ public class TricolourBloodProcessor implements ImageProcessor {
     }
 
     private boolean isPurple(Color color) {
-        double tolerance = 0.01;  // Adjust this value if needed
+        double tolerance = 0.01;  // Adjust this value as needed
         return Math.abs(color.getRed() - 75.0/255.0) < tolerance &&
                 Math.abs(color.getGreen() - 0.0) < tolerance &&
                 Math.abs(color.getBlue() - 130.0/255.0) < tolerance;
     }
 
     private boolean isRed(Color color) {
-        double tolerance = 0.01;  // Adjust this value if needed
+        double tolerance = 0.01;  // Adjust this value as needed
         return Math.abs(color.getRed() - 219.0/255.0) < tolerance &&
                 Math.abs(color.getGreen() - 112.0/255.0) < tolerance &&
                 Math.abs(color.getBlue() - 147.0/255.0) < tolerance;
