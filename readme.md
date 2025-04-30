@@ -62,3 +62,21 @@ The analysis process includes these steps:
 - Built with Java & JavaFX
 - Uses a Union-Find algorithm for cell identification
 - Implements custom image processing filters
+
+
+
+## Adjusting Detection levels with Minimum Cell Size slider
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+  <figure style="margin: 0; text-align: center;">
+    <img src="docs/images/NB1ln3_processed_20250430_010027.jpg" alt="Description 4" width="400">
+  </figure>
+  <figure style="margin: 0; text-align: center;">
+    <img src="docs/images/NB1ln3_processed_20250430_010015.jpg" alt="Description 1" width="400">
+  </figure>
+  <figure style="margin: 0; text-align: center;">
+    <img src="docs/images/NB1ln3_processed_20250430_005949.jpg" alt="Description 2" width="400">
+  </figure>
+  <figure style="margin: 0; text-align: center;">
+    <img src="docs/images/NB1ln3_processed_20250430_005933.jpg" alt="Description 3" width="400">
+  </figure>
+</div>
